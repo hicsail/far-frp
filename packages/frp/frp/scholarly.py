@@ -49,4 +49,3 @@ class FRPScholarlyAnalysis:
         df = self._augment(df)
         df = self._match(df)
         return df
-
