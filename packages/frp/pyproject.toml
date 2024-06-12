@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "frp"
+version = "0.1.0"
+description = ""
+authors = ["cbolles <collinbolles@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^2.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.10.0"
+pandas-stubs = "^2.2.2.240603"
+flake8 = "^7.0.0"
+black = "^24.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
