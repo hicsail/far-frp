@@ -6,6 +6,7 @@ class FRPScholarlyAnalysis:
     """
     Handles the cleaning and matching of MyCV CSVs to FRPs
     """
+
     def _load(self, csv_location: Path) -> pd.DataFrame:
         """
         Read in the dataframe from the CSV. Does not additional
