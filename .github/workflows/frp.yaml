@@ -47,7 +47,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Check for Linting Errors
+    name: Build
     defaults:
       run:
         working-directory: packages/frp
@@ -74,7 +74,7 @@ jobs:
 
   type-checking:
     runs-on: ubuntu-latest
-    name: Check for Linting Errors
+    name: Run Type Checking
     defaults:
       run:
         working-directory: packages/frp
