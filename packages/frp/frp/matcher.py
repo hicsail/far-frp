@@ -6,11 +6,12 @@ from langchain_core.output_parsers import StrOutputParser
 
 class Match:
     def __init__(self):
+        # Build up the LangChain chain for handling the matching
         prompt_template = self._get_prompt_template()
         model = self._get_model()
         output_parser = self._get_output_parser()
 
-        self.chain = prompt_template | model | output_parser
+        self._chain = prompt_template | model | output_parser
 
     def _get_prompt_template(self) -> runnables.Runnable:
         return ChatPromptTemplate.from_messages([
@@ -35,5 +36,5 @@ class Match:
                'abstract': 'Abstract example'
            }
         """
-        return True
+        return self._chain.invoke(mapping)
 
