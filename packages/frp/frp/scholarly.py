@@ -78,14 +78,16 @@ class FRPScholarlyAnalysis:
         of the dataframe
         """
         # Function which is applied to every row in the dataframe
-        def apply_matcher(row: pd.Series) -> Union[bool, NAType]:
+        def apply_matcher(row: pd.Series) -> pd.Series:
             mapping = {
                 'publication_title': row['Title OR Chapter title'],
                 'frp_title': frp_title
             }
-            return self._matcher.match(mapping)
+            return pd.Series(self._matcher.match(mapping))
 
+        # Make a copy of the data any apply the matching row-by-row
         matches = df.copy()
+        matches['Part of FRP'] = True
         matches['Part of FRP'] = matches.apply(apply_matcher, axis=1)
         return matches
 
