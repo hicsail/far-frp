@@ -1,9 +1,9 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, BooleanOptionalAction
 from pathlib import Path
 from frp import FRPScholarlyAnalysis, Matcher
 
 
-def scholarly_analysis(input_csv: Path) -> None:
+def scholarly_analysis(input_csv: Path, save_results: bool, save_output: Path) -> None:
     if not input_csv.exists():
         print('File {} does not exist'.format(input_csv))
         exit(1)
@@ -17,6 +17,10 @@ def scholarly_analysis(input_csv: Path) -> None:
     # Collect the results
     results = analyzer.run_frp_analysis(input_csv, 'Title', 2022)
 
+    # If the user wants the data saved, save it to the output location
+    if save_results:
+        results.to_csv(save_output)
+
     print(results['Part of FRP'])
 
 
@@ -28,13 +32,24 @@ def main():
 
     # Command: scholarly
     scholarly_parser = sub_parser.add_parser('scholarly')
-    scholarly_parser.add_argument('--input', required=True, help='Input CSV')
+    scholarly_parser.add_argument('--input',
+                                  required=True,
+                                  help='Input CSV')
+    scholarly_parser.add_argument('--save-output',
+                                  required=False,
+                                  default=False,
+                                  action=BooleanOptionalAction,
+                                  help='Flag if the results of the matching should be stored')
+    scholarly_parser.add_argument('--output-csv',
+                                  required=False,
+                                  default='data/scholarly_matching_results.csv',
+                                  help='Where to store the results of the matching')
 
     args = parser.parse_args()
 
     # Determine the correct command to run
     if args.command == 'scholarly':
-        scholarly_analysis(Path(args.input))
+        scholarly_analysis(Path(args.input), args.save_output, Path(args.output_csv))
         return
     else:
         print('Command {} not recognized'.format(args.command))
