@@ -1,8 +1,6 @@
 from pathlib import Path
 import pandas as pd
 from frp.matcher import Matcher
-from typing import Union
-from pandas._libs.missing import NAType
 
 
 class FRPScholarlyAnalysis:

@@ -37,15 +37,17 @@ class Matcher:
 
     def _get_prompt_template(self) -> runnables.Runnable:
         return ChatPromptTemplate.from_messages([
-            ( 'system',
+            ('system',
              '''
-             You are an assistant tasked with classifying whether the given publication title is associated with the given research topic.
+                You are an assistant tasked with classifying whether the given publication title
+                is associated with the given research topic.
 
-Specifically, the content should be marked as relevant if it involves:
-    1. Publications which are likely to have been written based on the research topic as a prompt.
-    2. If the publication title has overlap with the research topic.
+                Specifically, the content should be marked as relevant if it involves:
+                    1. Publications which are likely to have been written based on the research topic as a prompt.
+                    2. If the publication title has overlap with the research topic.
 
-Generate a short response indicating whether the content meets any of the above criteria. Respond with "Yes" for relevance or "No" if the publication does not have high overlap.
+                Generate a short response indicating whether the content meets any of the above criteria. Respond
+                with "Yes" for relevance or "No" if the publication does not have high overlap.
              '''),
             ('human', '''
              Assess the given headline and article body based on the specified criteria. Provide a concise response indicating relevance.
