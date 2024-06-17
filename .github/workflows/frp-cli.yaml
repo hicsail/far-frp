@@ -97,9 +97,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           cd ../frp
+          poetry config virtualenvs.create false
           poetry install
           cd ../frp-cli
           poetry install --with dev
 
       - name: Type Checking
-        run: poetry run mypy frp/
+        run: poetry run mypy frp_cli/
