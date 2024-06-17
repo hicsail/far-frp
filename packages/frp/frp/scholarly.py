@@ -78,7 +78,8 @@ class FRPScholarlyAnalysis:
         # Function which is applied to every row in the dataframe
         def apply_matcher(row: pd.Series) -> bool:
             mapping = {
-                'title': row['Title OR Chapter title']
+                'publication_title': row['Title OR Chapter title'],
+                'frp_title': frp_title
             }
             return self._matcher.match(mapping)
 
