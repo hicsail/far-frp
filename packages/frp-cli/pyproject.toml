@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "frp-cli"
+version = "0.1.0"
+description = ""
+authors = ["cbolles <collinbolles@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+main = "frp_cli:main"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.0"
+black = "^24.4.2"
+mypy = "^1.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
