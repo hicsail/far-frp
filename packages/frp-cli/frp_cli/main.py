@@ -3,7 +3,7 @@ from pathlib import Path
 from frp import FRPScholarlyAnalysis, Matcher
 
 
-def scholarly_analysis(input_csv: Path, save_results: bool, save_output: Path) -> None:
+def scholarly_analysis(input_csv: Path, frp_title: str, frp_year: int, save_results: bool, save_output: Path) -> None:
     if not input_csv.exists():
         print('File {} does not exist'.format(input_csv))
         exit(1)
@@ -15,7 +15,7 @@ def scholarly_analysis(input_csv: Path, save_results: bool, save_output: Path) -
     analyzer = FRPScholarlyAnalysis(matcher)
 
     # Collect the results
-    results = analyzer.run_frp_analysis(input_csv, 'Title', 2022)
+    results = analyzer.run_frp_analysis(input_csv, frp_title, frp_year)
 
     # If the user wants the data saved, save it to the output location
     if save_results:
@@ -35,6 +35,15 @@ def main():
     scholarly_parser.add_argument('--input',
                                   required=True,
                                   help='Input CSV')
+    scholarly_parser.add_argument('--frp-title',
+                                  required=False,
+                                  default='Leveraging AI to Examine Disparities and Bias in Health Care',
+                                  help='Name of the FRP to run matching against')
+    scholarly_parser.add_argument('--frp-year',
+                                  required=False,
+                                  default=2022,
+                                  type=int,
+                                  help='Year to start (inclusive) considering articles')
     scholarly_parser.add_argument('--save-output',
                                   required=False,
                                   default=False,
@@ -49,7 +58,7 @@ def main():
 
     # Determine the correct command to run
     if args.command == 'scholarly':
-        scholarly_analysis(Path(args.input), args.save_output, Path(args.output_csv))
+        scholarly_analysis(Path(args.input), args.frp_title, args.frp_year, args.save_output, Path(args.output_csv))
         return
     else:
         print('Command {} not recognized'.format(args.command))
