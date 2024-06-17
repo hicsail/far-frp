@@ -5,7 +5,8 @@ description = ""
 authors = ["cbolles <collinbolles@gmail.com>"]
 readme = "README.md"
 packages = [
-  { include = "frp" }
+  { include = "frp" },
+  { include = "frp/py.typed" }
 ]
 
 [tool.poetry.dependencies]
