@@ -17,7 +17,7 @@ def scholarly_analysis(input_csv: Path, config_path: Path, frp_title: str, frp_y
         config = toml.load(config_file)
 
     # Make the matcher
-    matcher = Matcher(config['matcher.scholarly'])
+    matcher = Matcher(config['scholarly']['matcher'])
 
     # Run the analysis
     analyzer = FRPScholarlyAnalysis(matcher)

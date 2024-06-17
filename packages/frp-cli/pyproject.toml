@@ -13,6 +13,7 @@ main = "frp_cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+toml = "^0.10.2"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -28,27 +28,27 @@ class BooleanOutputParser(BaseOutputParser[Union[bool, NAType]]):
 
 class Matcher:
     def __init__(self, config: dict):
+        # Pull out the needed configs
+        system_prompt = config['system_prompt']
+        human_prompt = config['human_prompt']
+        model_name = config['model_name']
+        model_base_url = config['model_base_url']
+
         # Build up the LangChain chain for handling the matching
-        system_prompt = config.get('system_prompt')
-        user_prompt = config.get('user_prompt')
-
-        if not system_prompt or not user_prompt:
-            raise Exception('Missing system or user prompt')
-
-        prompt_template = self._get_prompt_template(str(config.get('system_prompt')), str(config.get('user_prompt')))
-        model = self._get_model()
+        prompt_template = self._get_prompt_template(system_prompt, human_prompt)
+        model = self._get_model(model_base_url, model_name)
         output_parser = self._get_output_parser()
 
         self._chain = prompt_template | model | output_parser
 
-    def _get_prompt_template(self, system_prompt: str, user_prompt: str) -> runnables.Runnable:
+    def _get_prompt_template(self, system_prompt: str, human_prompt: str) -> runnables.Runnable:
         return ChatPromptTemplate.from_messages([
             ('system', system_prompt),
-            ('human', user_prompt)
+            ('human', human_prompt)
         ])
 
-    def _get_model(self) -> runnables.Runnable:
-        return Ollama(base_url='https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org', model='llama2:13b')
+    def _get_model(self, base_url: str, model_name: str) -> runnables.Runnable:
+        return Ollama(base_url=base_url, model=model_name)
 
     def _get_output_parser(self) -> runnables.Runnable:
         return BooleanOutputParser()
