@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 
-class Match:
+class Matcher:
     def __init__(self):
         # Build up the LangChain chain for handling the matching
         prompt_template = self._get_prompt_template()
@@ -36,4 +36,5 @@ class Match:
                'abstract': 'Abstract example'
            }
         """
-        return self._chain.invoke(mapping)
+        # return self._chain.invoke(mapping)
+        return True

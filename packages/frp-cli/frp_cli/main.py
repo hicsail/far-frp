@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
-from frp import FRPScholarlyAnalysis
+from frp import FRPScholarlyAnalysis, Matcher
 
 
 def scholarly_analysis(input_csv: Path) -> None:
@@ -8,8 +8,16 @@ def scholarly_analysis(input_csv: Path) -> None:
         print('File {} does not exist'.format(input_csv))
         exit(1)
 
-    analyzer = FRPScholarlyAnalysis()
-    analyzer.run_frp_analysis(input_csv, 'Title', 2022)
+    # Make the matcher
+    matcher = Matcher()
+
+    # Run the analysis
+    analyzer = FRPScholarlyAnalysis(matcher)
+
+    # Collect the results
+    results = analyzer.run_frp_analysis(input_csv, 'Title', 2022)
+
+    print(results['Part of FRP'])
 
 
 def main():

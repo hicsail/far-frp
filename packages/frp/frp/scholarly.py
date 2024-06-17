@@ -1,11 +1,14 @@
 from pathlib import Path
 import pandas as pd
+from frp.matcher import Matcher
 
 
 class FRPScholarlyAnalysis:
     """
     Handles the cleaning and matching of MyCV CSVs to FRPs
     """
+    def __init__(self, matcher: Matcher):
+        self._matcher = matcher
 
     def _load(self, csv_location: Path) -> pd.DataFrame:
         """
@@ -33,7 +36,7 @@ class FRPScholarlyAnalysis:
             'Conference name OR Presented at OR Meeting or conference': 'string',
             'Status': 'string',
             'Publisher': 'string',
-            'Publication date OR Date awarded OR Presentation date': 'datetime64',
+            'Publication date OR Date awarded OR Presentation date': 'datetime64[ns]',
             'Title OR Chapter title': 'string',
             'Sub types': 'string',
             'Canonical journal title': 'string'
@@ -67,17 +70,26 @@ class FRPScholarlyAnalysis:
         """
         return df
 
-    def _match(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _match(self, df: pd.DataFrame, frp_title: str) -> pd.DataFrame:
         """
         Handles running the FRP title matching against the rows
         of the dataframe
         """
-        return df
+        # Function which is applied to every row in the dataframe
+        def apply_matcher(row: pd.Series) -> bool:
+            mapping = {
+                'title': row['Title OR Chapter title']
+            }
+            return self._matcher.match(mapping)
+
+        matches = df.copy()
+        matches['Part of FRP'] = matches.apply(apply_matcher, axis=1)
+        return matches
 
     def run_frp_analysis(self, csv_location: Path, frp_title: str, year: int) -> pd.DataFrame:
         df = self._load(csv_location)
         df = self._standardize(df)
         df = self._filter(df, year)
         df = self._augment(df)
-        df = self._match(df)
+        df = self._match(df, frp_title)
         return df
