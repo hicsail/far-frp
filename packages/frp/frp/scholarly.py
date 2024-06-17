@@ -1,6 +1,8 @@
 from pathlib import Path
 import pandas as pd
 from frp.matcher import Matcher
+from typing import Union
+from pandas._libs.missing import NAType
 
 
 class FRPScholarlyAnalysis:
@@ -76,7 +78,7 @@ class FRPScholarlyAnalysis:
         of the dataframe
         """
         # Function which is applied to every row in the dataframe
-        def apply_matcher(row: pd.Series) -> bool:
+        def apply_matcher(row: pd.Series) -> Union[bool, NAType]:
             mapping = {
                 'publication_title': row['Title OR Chapter title'],
                 'frp_title': frp_title

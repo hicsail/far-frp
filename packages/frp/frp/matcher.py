@@ -1,7 +1,29 @@
 from langchain_core import runnables
 from langchain_community.llms import Ollama
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import BaseOutputParser
+import pandas as pd
+from pandas._libs.missing import NAType
+from typing import Union
+
+
+class BooleanOutputParser(BaseOutputParser[Union[bool, NAType]]):
+    """Custom boolean parser."""
+
+    true_val: str = "YES"
+    false_val: str = "NO"
+
+    def parse(self, text: str) -> Union[bool, NAType]:
+        cleaned_text = text.strip().upper()
+        if self.true_val in cleaned_text:
+            return True
+        elif self.false_val in cleaned_text:
+            return False
+        return pd.NA
+
+    @property
+    def _type(self) -> str:
+        return "boolean_output_parser"
 
 
 class Matcher:
@@ -38,9 +60,9 @@ Research Topic: {frp_title}
         return Ollama(base_url='https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org', model='llama2:13b')
 
     def _get_output_parser(self) -> runnables.Runnable:
-        return StrOutputParser()
+        return BooleanOutputParser()
 
-    def match(self, mapping: dict[str, str]) -> bool:
+    def match(self, mapping: dict[str, str]) -> Union[bool, NAType]:
         """
         Handles running the matching logic against a specific
         prompt. The mapping is between specific identifiers
@@ -52,9 +74,8 @@ Research Topic: {frp_title}
                'abstract': 'Abstract example'
            }
         """
-        print('begin')
         try:
-            result = self._chain.invoke(mapping)
+            return self._chain.invoke(mapping)
         except Exception as e:
             print(e)
         return True
