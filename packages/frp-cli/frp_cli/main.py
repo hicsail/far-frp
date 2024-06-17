@@ -1,15 +1,23 @@
 from argparse import ArgumentParser, BooleanOptionalAction
 from pathlib import Path
 from frp import FRPScholarlyAnalysis, Matcher
+import toml
 
 
-def scholarly_analysis(input_csv: Path, frp_title: str, frp_year: int, save_results: bool, save_output: Path) -> None:
+def scholarly_analysis(input_csv: Path, config_path: Path, frp_title: str, frp_year: int, save_results: bool, save_output: Path) -> None:
     if not input_csv.exists():
         print('File {} does not exist'.format(input_csv))
         exit(1)
 
+    if not config_path.exists():
+        print('File {} does not exist'.format(config_path))
+        exit(1)
+
+    with open(config_path, 'r') as config_file:
+        config = toml.load(config_file)
+
     # Make the matcher
-    matcher = Matcher()
+    matcher = Matcher(config['matcher.scholarly'])
 
     # Run the analysis
     analyzer = FRPScholarlyAnalysis(matcher)
@@ -35,6 +43,9 @@ def main():
     scholarly_parser.add_argument('--input',
                                   required=True,
                                   help='Input CSV')
+    scholarly_parser.add_argument('--config',
+                                  required=True,
+                                  help='Location of the FRP config file')
     scholarly_parser.add_argument('--frp-title',
                                   required=False,
                                   default='Leveraging AI to Examine Disparities and Bias in Health Care',
@@ -58,7 +69,7 @@ def main():
 
     # Determine the correct command to run
     if args.command == 'scholarly':
-        scholarly_analysis(Path(args.input), args.frp_title, args.frp_year, args.save_output, Path(args.output_csv))
+        scholarly_analysis(Path(args.input), Path(args.config), args.frp_title, args.frp_year, args.save_output, Path(args.output_csv))
         return
     else:
         print('Command {} not recognized'.format(args.command))

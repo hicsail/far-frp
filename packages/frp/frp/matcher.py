@@ -27,35 +27,24 @@ class BooleanOutputParser(BaseOutputParser[Union[bool, NAType]]):
 
 
 class Matcher:
-    def __init__(self):
+    def __init__(self, config: dict):
         # Build up the LangChain chain for handling the matching
-        prompt_template = self._get_prompt_template()
+        system_prompt = config.get('system_prompt')
+        user_prompt = config.get('user_prompt')
+
+        if not system_prompt or not user_prompt:
+            raise Exception('Missing system or user prompt')
+
+        prompt_template = self._get_prompt_template(str(config.get('system_prompt')), str(config.get('user_prompt')))
         model = self._get_model()
         output_parser = self._get_output_parser()
 
         self._chain = prompt_template | model | output_parser
 
-    def _get_prompt_template(self) -> runnables.Runnable:
+    def _get_prompt_template(self, system_prompt: str, user_prompt: str) -> runnables.Runnable:
         return ChatPromptTemplate.from_messages([
-            ('system',
-             '''
-                You are an assistant tasked with classifying whether the given publication title
-                is associated with the given research topic.
-
-                Specifically, the content should be marked as relevant if it involves:
-                    1. Publications which are likely to have been written based on the research topic as a prompt.
-                    2. If the publication title has overlap with the research topic.
-
-                Generate a short response indicating whether the content meets any of the above criteria. Respond
-                with "Yes" for relevance or "No" if the publication does not have high overlap.
-             '''),
-            ('human', '''
-             Assess the given headline and article body based on the specified criteria. Provide a concise response indicating relevance.
-
-Publication Title: {publication_title}
-
-Research Topic: {frp_title}
-             ''')
+            ('system', system_prompt),
+            ('human', user_prompt)
         ])
 
     def _get_model(self) -> runnables.Runnable:
