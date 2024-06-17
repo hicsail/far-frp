@@ -19,7 +19,7 @@ class Match:
         ])
 
     def _get_model(self) -> runnables.Runnable:
-        return Ollama(model='llama2')
+        return Ollama(base_url='https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org', model='llama2')
 
     def _get_output_parser(self) -> runnables.Runnable:
         return StrOutputParser()
@@ -37,4 +37,3 @@ class Match:
            }
         """
         return self._chain.invoke(mapping)
-

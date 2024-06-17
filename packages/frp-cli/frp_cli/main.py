@@ -1,19 +1,22 @@
 from argparse import ArgumentParser
 from pathlib import Path
+from frp import FRPScholarlyAnalysis
 
 
 def scholarly_analysis(input_csv: Path) -> None:
     if not input_csv.exists():
         print('File {} does not exist'.format(input_csv))
         exit(1)
-    pass
+
+    analyzer = FRPScholarlyAnalysis()
+    analyzer.run_frp_analysis(input_csv, 'Title', 2022)
 
 
 def main():
     parser = ArgumentParser()
 
     # Sub parser for the different commands
-    sub_parser = parser.add_subparsers(dest='command')
+    sub_parser = parser.add_subparsers(dest='command', required=True)
 
     # Command: scholarly
     scholarly_parser = sub_parser.add_parser('scholarly')
