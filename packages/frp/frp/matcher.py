@@ -27,39 +27,28 @@ class BooleanOutputParser(BaseOutputParser[Union[bool, NAType]]):
 
 
 class Matcher:
-    def __init__(self):
+    def __init__(self, config: dict):
+        # Pull out the needed configs
+        system_prompt = config['system_prompt']
+        human_prompt = config['human_prompt']
+        model_name = config['model_name']
+        model_base_url = config['model_base_url']
+
         # Build up the LangChain chain for handling the matching
-        prompt_template = self._get_prompt_template()
-        model = self._get_model()
+        prompt_template = self._get_prompt_template(system_prompt, human_prompt)
+        model = self._get_model(model_base_url, model_name)
         output_parser = self._get_output_parser()
 
         self._chain = prompt_template | model | output_parser
 
-    def _get_prompt_template(self) -> runnables.Runnable:
+    def _get_prompt_template(self, system_prompt: str, human_prompt: str) -> runnables.Runnable:
         return ChatPromptTemplate.from_messages([
-            ('system',
-             '''
-                You are an assistant tasked with classifying whether the given publication title
-                is associated with the given research topic.
-
-                Specifically, the content should be marked as relevant if it involves:
-                    1. Publications which are likely to have been written based on the research topic as a prompt.
-                    2. If the publication title has overlap with the research topic.
-
-                Generate a short response indicating whether the content meets any of the above criteria. Respond
-                with "Yes" for relevance or "No" if the publication does not have high overlap.
-             '''),
-            ('human', '''
-             Assess the given headline and article body based on the specified criteria. Provide a concise response indicating relevance.
-
-Publication Title: {publication_title}
-
-Research Topic: {frp_title}
-             ''')
+            ('system', system_prompt),
+            ('human', human_prompt)
         ])
 
-    def _get_model(self) -> runnables.Runnable:
-        return Ollama(base_url='https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org', model='llama2:13b')
+    def _get_model(self, base_url: str, model_name: str) -> runnables.Runnable:
+        return Ollama(base_url=base_url, model=model_name)
 
     def _get_output_parser(self) -> runnables.Runnable:
         return BooleanOutputParser()

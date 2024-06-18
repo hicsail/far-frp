@@ -7,8 +7,15 @@ class FRPScholarlyAnalysis:
     """
     Handles the cleaning and matching of MyCV CSVs to FRPs
     """
-    def __init__(self, matcher: Matcher):
+    def __init__(self, matcher: Matcher, config: dict):
         self._matcher = matcher
+
+        # Getting the mapping between columns and inputs
+        # to the matcher
+        # The mapping is between parameters in the matching
+        # to what they are referred to within the DataFrame.
+        # ex) publication_title: 'Title OR Chapter title'
+        self._mappings = config['matcher']['mappings']
 
     def _load(self, csv_location: Path) -> pd.DataFrame:
         """
@@ -77,10 +84,16 @@ class FRPScholarlyAnalysis:
         """
         # Function which is applied to every row in the dataframe
         def apply_matcher(row: pd.Series) -> pd.Series:
+            # First get all shared mappings
             mapping = {
-                'publication_title': row['Title OR Chapter title'],
                 'frp_title': frp_title
             }
+
+            # Then, add in the values from the row as defined in the
+            # config
+            for key, value in self._mappings.items():
+                mapping[key] = row[value]
+
             return pd.Series(self._matcher.match(mapping))
 
         # Make a copy of the data any apply the matching row-by-row
