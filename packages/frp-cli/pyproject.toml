@@ -20,6 +20,7 @@ toml = "^0.10.2"
 flake8 = "^7.1.0"
 black = "^24.4.2"
 mypy = "^1.10.0"
+types-toml = "^0.10.8.20240310"
 
 [build-system]
 requires = ["poetry-core"]
