@@ -20,7 +20,7 @@ def scholarly_analysis(input_csv: Path, config_path: Path, frp_title: str, frp_y
     matcher = Matcher(config['scholarly']['matcher'])
 
     # Run the analysis
-    analyzer = FRPScholarlyAnalysis(matcher)
+    analyzer = FRPScholarlyAnalysis(matcher, config['scholarly'])
 
     # Collect the results
     results = analyzer.run_frp_analysis(input_csv, frp_title, frp_year)
