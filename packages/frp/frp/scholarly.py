@@ -68,6 +68,7 @@ class FRPScholarlyAnalysis:
         """
         # Filter for everything on the current year or later
         df = df[df['Reporting date 1'].dt.year >= year]
+        df = df[(df['Scholarly & creative work type'] == 'Scholarly article') | (df['Scholarly & creative work type'] == 'Conference paper (Published)')]
         return df
 
     def _augment(self, df: pd.DataFrame) -> pd.DataFrame:
