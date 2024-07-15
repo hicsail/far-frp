@@ -1,10 +1,9 @@
-FROM node:18-alpine AS frp
+FROM ubi8/nodejs-18 AS frp
 
 # Copy over the source
 WORKDIR /usr/src/frp
 COPY . .
-RUN apk update && \
-    npm install && \
+RUN npm install && \
     npm run build
 
 # Expose the endpoint
