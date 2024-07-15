@@ -1,8 +1,7 @@
 FROM ubi8/nodejs-18 AS frp
 
 # Copy over the source
-WORKDIR /usr/src/frp
-COPY . .
+ADD . $HOME
 RUN npm install && \
     npm run build
 
