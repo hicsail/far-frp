@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { KubeConfig, CoreV1Api } from '@kubernetes/client-node';
+import { KubeConfig, BatchV1Api } from '@kubernetes/client-node';
 
 @Controller()
 export class AppController {
@@ -11,9 +11,10 @@ export class AppController {
     const kc = new KubeConfig();
     kc.loadFromDefault();
 
-    const k8sApi = kc.makeApiClient(CoreV1Api);
-    const podsRes = await k8sApi.listNamespacedPod('sail-24887a');
-    console.log(podsRes.body);
+    const batchV1beta1Api = kc.makeApiClient(BatchV1Api);
+    const jobs = await batchV1beta1Api.listNamespacedJob('sail-24887a');
+
+    console.log(jobs.body);
 
     return this.appService.getHello();
   }
