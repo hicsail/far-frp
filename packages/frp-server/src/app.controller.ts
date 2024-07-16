@@ -20,6 +20,7 @@ export class AppController {
 
     job.kind = 'Job';
     job.spec = new V1JobSpec();
+    job.spec.ttlSecondsAfterFinished = 30;
     job.spec.template = new V1PodTemplateSpec();
 
     console.log(job.spec);
