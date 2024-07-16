@@ -2,6 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NocoDBLink } from './dto/link.dto';
+import { requestAll } from './utils/pagination';
+
 
 @Injectable()
 export class FacultyService {
@@ -17,9 +19,9 @@ export class FacultyService {
 
 
   async getFRPLinks(facultyID: number): Promise<NocoDBLink[]> {
-    const requestURL = `${this.baseUri}/api/v2/tables/${this.facultyTableID}/links/${facultyID}/records/${facultyID}`;
+    const requestURL = `${this.baseUri}/api/v2/tables/${this.facultyTableID}/links/${this.facultyToFrpID}/records/${facultyID}`;
 
-    return [];
+    return requestAll<NocoDBLink>(this.httpService, requestURL)
   }
 
 }
