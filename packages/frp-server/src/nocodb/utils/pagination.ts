@@ -9,7 +9,6 @@ import { NocoDBPagination } from '../dto/pagination.dto';
 export const requestAll = async<ResponseType> (httpService: HttpService, requestURL: string): Promise<ResponseType[]> => {
   const results: ResponseType[] = [];
 
-
   let offset = 0;
   let allCaptured = false;
 

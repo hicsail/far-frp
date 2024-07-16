@@ -20,7 +20,6 @@ export class FacultyService {
 
   async getFRPLinks(facultyID: number): Promise<NocoDBLink[]> {
     const requestURL = `${this.baseUri}/api/v2/tables/${this.facultyTableID}/links/${this.facultyToFrpID}/records/${facultyID}`;
-
     return requestAll<NocoDBLink>(this.httpService, requestURL)
   }
 
