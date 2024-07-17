@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from pathlib import Path
-import urllib.request
 from frp import FRPScholarlyAnalysis, Matcher
 import toml
 import requests
@@ -62,7 +61,7 @@ def main():
     results = run_analysis(Path(args.csv_location),
                            Path(args.config_location),
                            args.frp_title,
-                           args.frp_year)
+                           int(args.frp_year))
     print(results)
 
 if __name__ == '__main__':
