@@ -1,6 +1,9 @@
 from pathlib import Path
 import pandas as pd
 from frp.matcher import Matcher
+import os
+import re
+import requests
 
 
 class FRPScholarlyAnalysis:
@@ -75,6 +78,39 @@ class FRPScholarlyAnalysis:
         Add additional information to the dataframe which
         will allow for improved matching
         """
+        # add new empty column to the df
+        df['Abstract'] = ''
+        pattern = r'([\^":~\\\[\]\{\}\(\)!|&\+])'
+
+        login = {
+            'key': os.getenv('DIMENSIONS_API_KEY'),
+        }
+        resp = requests.post('https://app.dimensions.ai/api/auth', json=login)
+        resp.raise_for_status()
+        token = resp.json()['token']
+
+        for index, row in df.iterrows():
+            title = row['Title OR Chapter title']
+            title = re.sub(pattern, r'\\\1', title)
+
+            
+            # TODO: temp method for getting abstract using title
+            headers = {
+                'Authorization': "JWT " + token
+            }
+
+            try:
+                resp = requests.post(
+                    'https://app.dimensions.ai/api/dsl/v2',
+                    data=f'search publications in title_abstract_only for "{title}" return publications[abstract] limit 1',
+                    headers=headers
+                )
+
+                abstract = resp.json().get('publications')[0]['abstract'].replace('\n', ' ')
+                df.at[index, 'Abstract'] = abstract
+            except:
+                print(f'Failed to fetch data for {title}')
+
         return df
 
     def _match(self, df: pd.DataFrame, frp_title: str) -> pd.DataFrame:
