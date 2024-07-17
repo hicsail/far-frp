@@ -3,14 +3,17 @@ from pathlib import Path
 import urllib.request
 from frp import FRPScholarlyAnalysis, Matcher
 import toml
-
+import requests
 
 def download_csv(csv_url: str, download_location: Path):
     """
     Handles downloading the CSV from the given
     URL.
     """
-    urllib.request.urlretrieve(csv_url, download_location)
+    result = requests.get(csv_url)
+
+    with open(download_location, 'wb') as csv_file:
+        csv_file.write(result.content)
 
 
 def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year: int):
@@ -56,8 +59,8 @@ def main():
     download_csv(args.csv_url, args.csv_location)
 
     # Run the matching logic
-    results = run_analysis(args.csv_location,
-                           args.config_location,
+    results = run_analysis(Path(args.csv_location),
+                           Path(args.config_location),
                            args.frp_title,
                            args.frp_year)
     print(results)
