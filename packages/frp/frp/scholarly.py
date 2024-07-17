@@ -93,8 +93,6 @@ class FRPScholarlyAnalysis:
             title = row['Title OR Chapter title']
             title = re.sub(pattern, r'\\\1', title)
 
-            
-            # TODO: temp method for getting abstract using title
             headers = {
                 'Authorization': "JWT " + token
             }
@@ -108,8 +106,9 @@ class FRPScholarlyAnalysis:
 
                 abstract = resp.json().get('publications')[0]['abstract'].replace('\n', ' ')
                 df.at[index, 'Abstract'] = abstract
-            except:
+            except Exception:
                 print(f'Failed to fetch data for {title}')
+                continue
 
         return df
 
