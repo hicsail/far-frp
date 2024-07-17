@@ -14,13 +14,14 @@ python = "^3.9"
 pandas = "^2.2.2"
 langchain = "^0.2.4"
 langchain-community = "^0.2.4"
-requests = "^2.32.3"
+requests = "^2.25.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.10.0"
 pandas-stubs = "^2.2.2.240603"
 flake8 = "^7.0.0"
 black = "^24.4.2"
+types-requests = "^2.25.1"
 
 [build-system]
 requires = ["poetry-core"]
