@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { NocoDBInsertWebhookPayload } from './dto/upload.dto';
 import { UploadService } from './upload.service';
 
@@ -8,7 +8,7 @@ export class UploadController {
 
   @Post('publications')
   async handlePublicationsWebhook(@Body() payload: NocoDBInsertWebhookPayload): Promise<void> {
-    const targetFaculty = payload.data.rows[0].Faculty;
+    const targetFaculty = payload.data.rows[0].Faculty.toString();
 
     await this.uploadService.handleUpload(targetFaculty);
   }

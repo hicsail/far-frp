@@ -5,9 +5,9 @@ import { FacultyService } from '../nocodb/faculty.service';
 export class UploadService {
   constructor(private readonly facultyService: FacultyService) {}
 
-  async handleUpload(facultyID: number) {
+  async handleUpload(facultyID: string) {
     // Get the FRP's associated with the faculty
-    const frpTitles = (await this.facultyService.getFRPLinks(facultyID)).map((link) => link.Title);
+    const frpTitles = (await this.facultyService.getFRPLinks(facultyID));
     console.log(frpTitles);
   }
 }
