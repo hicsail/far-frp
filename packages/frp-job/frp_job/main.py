@@ -41,8 +41,36 @@ def return_results(results: pd.DataFrame, webhook_url: str) -> None:
     """
     Return the results back to the specified location
     """
-    payload = results.to_json()
-    requests.post(webhook_url, data=payload)
+    columns_of_interest = {
+        'Title OR Chapter title': 'title',
+        'Canonical journal title': 'journal',
+        'Authors OR Patent owners OR Presenters': 'authors',
+        'Reporting date 1': 'publicationDate'
+    }
+
+    # Get only the matches
+    results = results[results['Part of FRP'] == True]
+
+    # Get the columns needed for the analysis results
+    results = results[columns_of_interest.keys()]
+
+    # Rename the columns to match the expected format for the completion webhook
+    results = results.rename(columns=columns_of_interest)
+
+    # Convert the timestamp fields
+    results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
+
+    # Convert the data to a dictionary
+    payload = dict()
+    payload['results'] = results.to_dict('records')
+
+    print(payload)
+
+    result = requests.post(webhook_url, json=payload)
+
+    if result.status_code != 201:
+        print(f'Request failed with code {result.status_code}: {result.content}')
+        raise Exception('Failed to share results')
 
 
 def main():

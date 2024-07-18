@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { AnalysisCompletion } from './dto/completion.dto';
 import { NocoDBInsertWebhookPayload } from './dto/upload.dto';
 import { UploadService } from './upload.service';
 
@@ -11,5 +12,14 @@ export class UploadController {
     const targetFaculty = payload.data.rows[0].Faculty.toString();
 
     await this.uploadService.handleUpload(targetFaculty);
+  }
+
+  /**
+   * When the analysis process has complete, this will handle completing
+   * the analysis request.
+   */
+  @Post('complete')
+  async handleAnalysisComplete(@Body() analysisPayload: AnalysisCompletion): Promise<void> {
+    console.log(analysisPayload);
   }
 }
