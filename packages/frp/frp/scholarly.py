@@ -80,6 +80,7 @@ class FRPScholarlyAnalysis:
         """
         # add new empty column to the df
         df['Abstract'] = ''
+        # demension api requires escaping all special characters
         pattern = r'([\^":~\\\[\]\{\}\(\)!|&\+])'
 
         login = {
@@ -91,6 +92,7 @@ class FRPScholarlyAnalysis:
 
         for index, row in df.iterrows():
             title = row['Title OR Chapter title']
+            # apply pattern to escape special characters
             title = re.sub(pattern, r'\\\1', title)
 
             headers = {
