@@ -6,7 +6,7 @@ WORKDIR /libs/
 
 COPY ./frp .
 
-RUN poetry install
+RUN poetry config virtualenvs.create false && cd frp && poetry install
 
 WORKDIR /app
 
@@ -14,4 +14,4 @@ COPY ./frp-job .
 
 RUN poetry install
 
-ENTRYPOINT ["poetry", "run", "python", "-m", "annapurna.main"]
+ENTRYPOINT ["poetry", "run", "python", "frp_job/main.py"]

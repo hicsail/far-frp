@@ -24,18 +24,11 @@ export class PublicationService {
   }
 
   async create(title: string, journal: string, publicationDate: string): Promise<Publication> {
-    try{
-    const result = await this.nocodbService.dbDataTableRow.create(this.publicationTableID, {
+    return await this.nocodbService.dbDataTableRow.create(this.publicationTableID, {
       'Title': title,
       'Journal': journal,
       'Publication Date': publicationDate
     });
-      console.log(result);
-      return result;
-    }catch(e) {
-      console.log(e);
-      throw new Error('bad');
-    }
   }
 
   async linkFaculty(publicationID: string, facultyID: string): Promise<void> {
