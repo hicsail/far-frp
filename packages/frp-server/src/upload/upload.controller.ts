@@ -20,6 +20,6 @@ export class UploadController {
    */
   @Post('complete')
   async handleAnalysisComplete(@Body() analysisPayload: AnalysisCompletion): Promise<void> {
-    console.log(analysisPayload);
+    await this.uploadService.handleAnalysisCompletion(analysisPayload);
   }
 }

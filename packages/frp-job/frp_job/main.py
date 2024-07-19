@@ -4,6 +4,7 @@ from frp import FRPScholarlyAnalysis, Matcher
 import toml
 import requests
 import pandas as pd
+import json
 
 
 def download_csv(csv_url: str, download_location: Path) -> None:
@@ -37,7 +38,7 @@ def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year
     return analyzer.run_frp_analysis(csv_location, frp_title, frp_year)
 
 
-def return_results(results: pd.DataFrame, webhook_url: str) -> None:
+def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dict) -> None:
     """
     Return the results back to the specified location
     """
@@ -64,7 +65,8 @@ def return_results(results: pd.DataFrame, webhook_url: str) -> None:
     payload = dict()
     payload['results'] = results.to_dict('records')
 
-    print(payload)
+    # Combine the data with the other webhook payload
+    payload.update(webhook_payload)
 
     result = requests.post(webhook_url, json=payload)
 
@@ -83,6 +85,8 @@ def main():
                         help='Year the FRP should be matched against')
     parser.add_argument('webhook_url',
                         help='The webhook to call when the matching has completed')
+    parser.add_argument('webhook_payload',
+                        help='JSON of the data that needs to be passed to the webhook')
     parser.add_argument('--csv_location',
                         required=False,
                         default='./data/publications.csv',
@@ -104,7 +108,7 @@ def main():
                            int(args.frp_year))
 
     # Pass the results back to the webhook
-    return_results(results, args.webhook_url)
+    return_results(results, args.webhook_url, json.loads(args.webhook_payload))
 
 if __name__ == '__main__':
     main()
