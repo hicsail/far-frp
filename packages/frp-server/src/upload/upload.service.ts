@@ -14,4 +14,8 @@ export class UploadService {
     const frpIDs = (await this.facultyService.getFRPLinks(facultyID)).map((frp) => frp.Id);
     const frps = await Promise.all(frpIDs.map((frpID) => this.frpService.getFRP(frpID.toString())));
   }
+
+  async handleAnalysisCompletion() {
+    // Get all publications from the
+  }
 }
