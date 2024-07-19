@@ -1,0 +1,19 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: feature/cbolles/webhook-handler
+    app.openshift.io/vcs-uri: 'https://github.com/hicsail/far-frp'
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: frp-job
+  generation: 1
+  namespace: sail-24887a
+  labels:
+    app: frp-job
+    app.kubernetes.io/component: frp-job
+    app.kubernetes.io/instance: frp-job
+    app.kubernetes.io/name: frp-job
+    app.kubernetes.io/part-of: frp-roi
+spec:
+  lookupPolicy:
+    local: false
