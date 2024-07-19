@@ -7,6 +7,8 @@ import { InjectNocoDB } from './nocodb.provider';
 @Injectable()
 export class PublicationService {
   private readonly publicationTableID = this.configService.getOrThrow<string>('nocodb.publicationTableID');
+  private readonly publicationToFacultyID = this.configService.getOrThrow<string>('nocodb.publicationToFacultyID');
+  private readonly publicationToFRPID = this.configService.getOrThrow<string>('nocodb.publicationToFRPID');
 
   constructor(
     @InjectNocoDB() private readonly nocodbService: Api<null>,
@@ -26,6 +28,18 @@ export class PublicationService {
       'Title': title,
       'Journal': journal,
       'Publication Date': publicationDate
+    });
+  }
+
+  async linkFaculty(publicationID: string, facultyID: string): Promise<void> {
+    await this.nocodbService.dbDataTableRow.nestedLink(this.publicationTableID, this.publicationToFacultyID, publicationID, {
+      Id: facultyID
+    });
+  }
+
+  async linkFRP(publicationID: string, frpID: string): Promise<void> {
+    await this.nocodbService.dbDataTableRow.nestedLink(this.publicationTableID, this.publicationToFRPID, publicationID, {
+      Id: frpID
     });
   }
 }

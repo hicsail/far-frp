@@ -18,7 +18,8 @@ export class UploadService {
     const frpIDs = (await this.facultyService.getFRPLinks(facultyID)).map((frp) => frp.Id);
     const frps = await Promise.all(frpIDs.map((frpID) => this.frpService.getFRP(frpID.toString())));
 
-    // Store the needed information on the job
+    // TODO: In the future this information will be stored in a seperate DB and ID of
+    // that entry will be shared with the job
 
     // Start the job
   }
@@ -28,8 +29,14 @@ export class UploadService {
     const publications = await this.getOrCreatePublications(analysisResults);
 
     // Link the publications with the associated faculty
+    await Promise.all(publications.map(async (publication) => {
+      await this.publicationService.linkFaculty(publication.Id.toString(), analysisResults.facultyID.toString());
+    }));
 
     // Link the publications with the associated FRP
+    await Promise.all(publications.map(async (publication) => {
+      await this.publicationService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
+    }));
   }
 
   /**

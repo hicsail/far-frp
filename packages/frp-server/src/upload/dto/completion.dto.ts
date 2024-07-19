@@ -21,4 +21,10 @@ export class AnalysisCompletion {
   @Type(() => AnalysisResults)
   /** The results from the matching process */
   results: AnalysisResults[];
+
+  @IsString()
+  facultyID: string;
+
+  @IsString()
+  frpID: string;
 }
