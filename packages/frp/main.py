@@ -89,7 +89,7 @@ def main():
                         help='JSON of the data that needs to be passed to the webhook')
     parser.add_argument('--csv_location',
                         required=False,
-                        default='./data/publications.csv',
+                        default='/tmp/publications.csv',
                         help='Location to download the CSV to')
     parser.add_argument('--config_location',
                         required=False,

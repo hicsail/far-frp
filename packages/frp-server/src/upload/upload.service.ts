@@ -36,7 +36,7 @@ export class UploadService {
 
     // Start the jobs
     for(const frp of frps) {
-      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, `${this.backendUrl}/upload/complete`, { facultyID, frpID: frp.Id });
+      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, { facultyID, frpID: frp.Id });
     }
   }
 

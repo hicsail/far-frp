@@ -33,12 +33,13 @@ export class JobService {
 
   }
 
-  async triggerJob(csvUrl: string, frpTitle: string, webhookUrl: string, webhookPayload: any): Promise<void> {
+  async triggerJob(csvUrl: string, frpTitle: string, frpYear: string, webhookUrl: string, webhookPayload: any): Promise<void> {
     const command = [
       'python',
       'main.py',
       csvUrl,
       frpTitle,
+      frpYear,
       webhookUrl,
       JSON.stringify(webhookPayload)
     ];
