@@ -26,14 +26,14 @@ spec:
   strategy:
     type: Docker
     dockerStrategy:
-      dockerfilePath: Dockerfile
+      dockerfilePath: frp-job/Dockerfile
   postCommit: {}
   source:
     type: Git
     git:
       uri: 'https://github.com/hicsail/far-frp'
       ref: feature/cbolles/webhook-handler
-    contextDir: /packages/frp-job
+    contextDir: /packages/
   triggers:
     - type: Generic
       generic:
