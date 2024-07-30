@@ -1,3 +1,4 @@
 dist/
 *.pyc
 data/publications.csv
+!./data/config.toml
