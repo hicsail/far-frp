@@ -68,6 +68,8 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
     # Combine the data with the other webhook payload
     payload.update(webhook_payload)
 
+    print(payload)
+
     result = requests.post(webhook_url, json=payload)
 
     if result.status_code != 201:

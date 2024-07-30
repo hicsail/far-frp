@@ -36,11 +36,12 @@ export class UploadService {
 
     // Start the jobs
     for(const frp of frps) {
-      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, { facultyID, frpID: frp.Id });
+      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, { facultyID: facultyID.toString(), frpID: frp.Id.toString() });
     }
   }
 
   async handleAnalysisCompletion(analysisResults: AnalysisCompletion): Promise<void> {
+    console.log(analysisResults);
     // Get all publications from the matching
     const publications = await this.getOrCreatePublications(analysisResults);
 

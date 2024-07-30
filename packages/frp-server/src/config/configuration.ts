@@ -17,5 +17,8 @@ export default () => ({
   },
   server: {
     url: process.env.BACKEND_URL
+  },
+  dimensions: {
+    key: process.env.DIMENSIONS_API_KEY
   }
 });

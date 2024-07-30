@@ -8,6 +8,7 @@ export class JobService {
   private readonly job = new V1Job();
   private readonly batchClient = this.kubeConfig.makeApiClient(BatchV1Api);
   private readonly namespace = this.configService.getOrThrow<string>('kube.namespace');
+  private readonly dimensionsKey = this.configService.getOrThrow<string>('dimensions.key');
 
   constructor(@InjectKube() private readonly kubeConfig: KubeConfig, private readonly configService: ConfigService) {
     // Create a representation of the Kubernetes job ahead of time
@@ -27,7 +28,8 @@ export class JobService {
       name: 'frp-job',
       image: configService.getOrThrow<string>('kube.jobImage'),
       // NOTE: The command will be modified with the specific parameters later
-      command: []
+      command: [],
+      env: [{ name: 'DIMENSIONS_API_KEY', value: this.dimensionsKey }]
     });
     this.job.spec.template.spec.restartPolicy = 'Never';
 
