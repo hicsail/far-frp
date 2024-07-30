@@ -10,8 +10,9 @@ export class UploadController {
   @Post('publications')
   async handlePublicationsWebhook(@Body() payload: NocoDBInsertWebhookPayload): Promise<void> {
     const targetFaculty = payload.data.rows[0].Faculty.toString();
+    const csvUrlStub = payload.data.rows[0].FAR[0].signedPath;
 
-    await this.uploadService.handleUpload(targetFaculty);
+    await this.uploadService.handleUpload(targetFaculty, csvUrlStub);
   }
 
   /**

@@ -8,5 +8,12 @@ export default () => ({
     publicationTableID: process.env.PUBLICATION_TABLE_ID,
     publicationToFacultyID: process.env.PUBLICATION_TO_FACULTY_ID,
     publicationToFRPID: process.env.PUBLICATION_TO_FRP_ID
+  },
+  kube: {
+    jobImage: process.env.JOB_IMAGE,
+    namespace: process.env.KUBE_NAMESPACE
+  },
+  server: {
+    url: process.env.BACKEND_URL
   }
 });
