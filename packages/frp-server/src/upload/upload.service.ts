@@ -24,6 +24,7 @@ export class UploadService {
 
   async handleUpload(publicationUploadID: string, csvUrlStub: string) {
     // Get the faculty associated with the publication upload
+    // NOTE: only one faculty is allowed per upload
     const facultyID = (await this.publicationUploadService.getFacultyLinks(publicationUploadID))[0].Id.toString();
 
     // Get the FRP's associated with the faculty
