@@ -14,4 +14,6 @@ COPY ./frp-job .
 
 RUN poetry install
 
+VOLUME /app/data
+
 ENTRYPOINT ["poetry", "run", "python", "frp_job/main.py"]
