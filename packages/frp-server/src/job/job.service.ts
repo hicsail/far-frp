@@ -35,10 +35,8 @@ export class JobService {
 
   async triggerJob(csvUrl: string, frpTitle: string, webhookUrl: string, webhookPayload: any): Promise<void> {
     const command = [
-      'poetry',
-      'run',
       'python',
-      'frp_job/main.py',
+      'main.py',
       csvUrl,
       frpTitle,
       webhookUrl,
