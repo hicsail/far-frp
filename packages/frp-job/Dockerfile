@@ -1,4 +1,4 @@
-FROM python:3.11-buster
+FROM ubi8/python-39
 
 RUN pip install poetry
 
