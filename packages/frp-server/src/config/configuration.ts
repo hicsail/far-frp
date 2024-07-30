@@ -7,7 +7,9 @@ export default () => ({
     frpTableID: process.env.FRP_TABLE_ID,
     publicationTableID: process.env.PUBLICATION_TABLE_ID,
     publicationToFacultyID: process.env.PUBLICATION_TO_FACULTY_ID,
-    publicationToFRPID: process.env.PUBLICATION_TO_FRP_ID
+    publicationToFRPID: process.env.PUBLICATION_TO_FRP_ID,
+    publicationUploadTableID: process.env.PUBLICATION_UPLOAD_TABLE_ID,
+    publicationUploadToFacultyID: process.env.PUBLICATION_UPLOAD_TO_FACULTY_ID
   },
   kube: {
     jobImage: process.env.JOB_IMAGE,

@@ -6,6 +6,7 @@ import { AnalysisCompletion } from './dto/completion.dto';
 import { PublicationService } from '../nocodb/publication.service';
 import { JobService } from '../job/job.service';
 import { ConfigService } from '@nestjs/config';
+import { PublicationUploadService } from '../nocodb/publication-upload.service';
 
 @Injectable()
 export class UploadService {
@@ -17,10 +18,14 @@ export class UploadService {
     private readonly frpService: FrpService,
     private readonly publicationService: PublicationService,
     private readonly jobService: JobService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly publicationUploadService: PublicationUploadService
   ) {}
 
-  async handleUpload(facultyID: string, csvUrlStub: string) {
+  async handleUpload(publicationUploadID: string, csvUrlStub: string) {
+    // Get the faculty associated with the publication upload
+    const facultyID = (await this.publicationUploadService.getFacultyLinks(publicationUploadID))[0].Id.toString();
+
     // Get the FRP's associated with the faculty
     const frpIDs = (await this.facultyService.getFRPLinks(facultyID)).map((frp) => frp.Id);
     const frps = await Promise.all(frpIDs.map((frpID) => this.frpService.getFRP(frpID.toString())));
