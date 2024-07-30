@@ -60,6 +60,7 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
 
     # Convert the timestamp fields
     results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
+    results.fillna('',inplace=True)
 
     # Convert the data to a dictionary
     payload = dict()
@@ -68,7 +69,6 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
     # Combine the data with the other webhook payload
     payload.update(webhook_payload)
 
-    print(payload)
 
     result = requests.post(webhook_url, json=payload)
 
