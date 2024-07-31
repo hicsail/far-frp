@@ -1,4 +1,4 @@
-import { IsString, IsObject, ValidateNested, IsArray } from 'class-validator';
+import { IsString, ValidateNested, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AnalysisResults {
@@ -27,4 +27,7 @@ export class AnalysisCompletion {
 
   @IsString()
   frpID: string;
+
+  @IsString()
+  uploadID: string;
 }

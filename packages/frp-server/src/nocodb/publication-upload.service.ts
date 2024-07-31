@@ -20,4 +20,8 @@ export class PublicationUploadService {
       return this.nocoDBService.dbDataTableRow.nestedList(this.publicationUploadTableID, this.publicationUploadToFacultyID, publicationUploadID, { offset });
     });
   }
+
+  async makeComplete(publicationUploadID: string): Promise<void> {
+    await this.nocoDBService.dbDataTableRow.update(this.publicationUploadTableID, { 'Status': 'Complete' });
+  }
 }

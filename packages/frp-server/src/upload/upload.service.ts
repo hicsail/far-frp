@@ -36,7 +36,11 @@ export class UploadService {
 
     // Start the jobs
     for(const frp of frps) {
-      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, { facultyID: facultyID.toString(), frpID: frp.Id.toString() });
+      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, {
+        facultyID: facultyID.toString(),
+        frpID: frp.Id.toString(),
+        uploadID: publicationUploadID.toString()
+      });
     }
   }
 
@@ -54,6 +58,9 @@ export class UploadService {
     await Promise.all(publications.map(async (publication) => {
       await this.publicationService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
     }));
+
+    // Make the upload as complete
+    await this.publicationUploadService.makeComplete(analysisResults.uploadID);
   }
 
   /**
