@@ -22,6 +22,7 @@ export class PublicationUploadService {
   }
 
   async makeComplete(publicationUploadID: string): Promise<void> {
-    await this.nocoDBService.dbDataTableRow.update(this.publicationUploadTableID, { 'Status': 'Complete' });
+    await this.nocoDBService.dbDataTableRow.update(this.publicationUploadTableID,
+      { 'Id': publicationUploadID, 'Status': 'Complete' });
   }
 }
