@@ -16,6 +16,6 @@ import configuration from './config/configuration';
     NocodbModule,
     JobModule
   ],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}

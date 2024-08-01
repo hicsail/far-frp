@@ -1,4 +1,12 @@
-import { KubeConfig, V1Job, V1ObjectMeta, V1JobSpec, V1PodTemplateSpec, V1PodSpec, BatchV1Api } from '@kubernetes/client-node';
+import {
+  KubeConfig,
+  V1Job,
+  V1ObjectMeta,
+  V1JobSpec,
+  V1PodTemplateSpec,
+  V1PodSpec,
+  BatchV1Api
+} from '@kubernetes/client-node';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectKube } from './kubectl.provider';
@@ -32,19 +40,16 @@ export class JobService {
       env: [{ name: 'DIMENSIONS_API_KEY', value: this.dimensionsKey }]
     });
     this.job.spec.template.spec.restartPolicy = 'Never';
-
   }
 
-  async triggerJob(csvUrl: string, frpTitle: string, frpYear: string, webhookUrl: string, webhookPayload: any): Promise<void> {
-    const command = [
-      'python',
-      'main.py',
-      csvUrl,
-      frpTitle,
-      frpYear,
-      webhookUrl,
-      JSON.stringify(webhookPayload)
-    ];
+  async triggerJob(
+    csvUrl: string,
+    frpTitle: string,
+    frpYear: string,
+    webhookUrl: string,
+    webhookPayload: any
+  ): Promise<void> {
+    const command = ['python', 'main.py', csvUrl, frpTitle, frpYear, webhookUrl, JSON.stringify(webhookPayload)];
 
     this.job.spec!.template.spec!.containers[0].command = command;
 

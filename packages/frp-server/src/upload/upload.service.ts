@@ -35,12 +35,18 @@ export class UploadService {
     // that entry will be shared with the job
 
     // Start the jobs
-    for(const frp of frps) {
-      await this.jobService.triggerJob(`${this.nocodbBaseUrl}/${csvUrlStub}`, frp.Title, frp.Year.toString(), `${this.backendUrl}/upload/complete`, {
-        facultyID: facultyID.toString(),
-        frpID: frp.Id.toString(),
-        uploadID: publicationUploadID.toString()
-      });
+    for (const frp of frps) {
+      await this.jobService.triggerJob(
+        `${this.nocodbBaseUrl}/${csvUrlStub}`,
+        frp.Title,
+        frp.Year.toString(),
+        `${this.backendUrl}/upload/complete`,
+        {
+          facultyID: facultyID.toString(),
+          frpID: frp.Id.toString(),
+          uploadID: publicationUploadID.toString()
+        }
+      );
     }
   }
 
@@ -50,14 +56,18 @@ export class UploadService {
     const publications = await this.getOrCreatePublications(analysisResults);
 
     // Link the publications with the associated faculty
-    await Promise.all(publications.map(async (publication) => {
-      await this.publicationService.linkFaculty(publication.Id.toString(), analysisResults.facultyID.toString());
-    }));
+    await Promise.all(
+      publications.map(async (publication) => {
+        await this.publicationService.linkFaculty(publication.Id.toString(), analysisResults.facultyID.toString());
+      })
+    );
 
     // Link the publications with the associated FRP
-    await Promise.all(publications.map(async (publication) => {
-      await this.publicationService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
-    }));
+    await Promise.all(
+      publications.map(async (publication) => {
+        await this.publicationService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
+      })
+    );
 
     // Make the upload as complete
     await this.publicationUploadService.makeComplete(analysisResults.uploadID);
@@ -68,12 +78,14 @@ export class UploadService {
    * don't exist or return the existing ones
    */
   private async getOrCreatePublications(analysisResults: AnalysisCompletion): Promise<Publication[]> {
-    return Promise.all(analysisResults.results.map(async (match) => {
-      const existing = await this.publicationService.findByTitle(match.title);
-      if (existing) {
-        return existing;
-      }
-      return this.publicationService.create(match.title, match.journal, match.publicationDate);
-    }));
+    return Promise.all(
+      analysisResults.results.map(async (match) => {
+        const existing = await this.publicationService.findByTitle(match.title);
+        if (existing) {
+          return existing;
+        }
+        return this.publicationService.create(match.title, match.journal, match.publicationDate);
+      })
+    );
   }
 }

@@ -1,12 +1,12 @@
 import { PaginatedType } from 'nocodb-sdk';
 
-type PaginationOperation = (offset: number) => Promise<{ list: any[], pageInfo: PaginatedType }>;
+type PaginationOperation = (offset: number) => Promise<{ list: any[]; pageInfo: PaginatedType }>;
 
 /**
  * Helper function to make a request over all the
  * data in the pagination
  */
-export const requestAll = async<ResponseType> (operation: PaginationOperation): Promise<ResponseType[]> => {
+export const requestAll = async <ResponseType>(operation: PaginationOperation): Promise<ResponseType[]> => {
   let results: ResponseType[] = [];
 
   let offset = 0;

@@ -20,26 +20,36 @@ export class PublicationService {
       where: `(Title,eq,${title})`
     });
 
-    return matching.list.at(0) as Publication || null;
+    return (matching.list.at(0) as Publication) || null;
   }
 
   async create(title: string, journal: string, publicationDate: string): Promise<Publication> {
     return await this.nocodbService.dbDataTableRow.create(this.publicationTableID, {
-      'Title': title,
-      'Journal': journal,
+      Title: title,
+      Journal: journal,
       'Publication Date': publicationDate
     });
   }
 
   async linkFaculty(publicationID: string, facultyID: string): Promise<void> {
-    await this.nocodbService.dbDataTableRow.nestedLink(this.publicationTableID, this.publicationToFacultyID, publicationID, {
-      Id: facultyID
-    });
+    await this.nocodbService.dbDataTableRow.nestedLink(
+      this.publicationTableID,
+      this.publicationToFacultyID,
+      publicationID,
+      {
+        Id: facultyID
+      }
+    );
   }
 
   async linkFRP(publicationID: string, frpID: string): Promise<void> {
-    await this.nocodbService.dbDataTableRow.nestedLink(this.publicationTableID, this.publicationToFRPID, publicationID, {
-      Id: frpID
-    });
+    await this.nocodbService.dbDataTableRow.nestedLink(
+      this.publicationTableID,
+      this.publicationToFRPID,
+      publicationID,
+      {
+        Id: frpID
+      }
+    );
   }
 }

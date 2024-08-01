@@ -6,5 +6,5 @@ export interface NocoDBPagination<Type> {
     pageSize: number;
     isFirstPage: boolean;
     isLastPage: boolean;
-  }
+  };
 }

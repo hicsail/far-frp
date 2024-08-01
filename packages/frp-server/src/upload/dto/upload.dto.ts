@@ -62,7 +62,6 @@ export class NocoDBInsertWebhookData {
   rows: NocoDBInsertWebhookRow[];
 }
 
-
 export class NocoDBInsertWebhookPayload {
   @IsString()
   type: string;

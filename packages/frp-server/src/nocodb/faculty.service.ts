@@ -5,7 +5,6 @@ import { NocoDBLink } from './dto/link.dto';
 import { InjectNocoDB } from './nocodb.provider';
 import { requestAll } from './utils/pagination';
 
-
 @Injectable()
 export class FacultyService {
   private readonly facultyTableID = this.configService.getOrThrow<string>('nocodb.facultyTableID');
@@ -16,11 +15,11 @@ export class FacultyService {
     private readonly configService: ConfigService
   ) {}
 
-
   async getFRPLinks(facultyID: string): Promise<NocoDBLink[]> {
     return requestAll<NocoDBLink>((offset) => {
-      return this.nocoDBService.dbDataTableRow.nestedList(this.facultyTableID, this.facultyToFrpID, facultyID, { offset });
+      return this.nocoDBService.dbDataTableRow.nestedList(this.facultyTableID, this.facultyToFrpID, facultyID, {
+        offset
+      });
     });
   }
-
 }
