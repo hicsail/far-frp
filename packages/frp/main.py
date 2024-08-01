@@ -50,7 +50,7 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
     }
 
     # Get only the matches
-    results = results[results['Part of FRP'] == True]
+    results = results[results['Part of FRP']]
 
     # Get the columns needed for the analysis results
     results = results[columns_of_interest.keys()]
@@ -60,7 +60,7 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
 
     # Convert the timestamp fields
     results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
-    results.fillna('',inplace=True)
+    results.fillna('', inplace=True)
 
     # Convert the data to a dictionary
     payload = dict()
@@ -68,7 +68,6 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
 
     # Combine the data with the other webhook payload
     payload.update(webhook_payload)
-
 
     result = requests.post(webhook_url, json=payload)
 
@@ -111,6 +110,7 @@ def main():
 
     # Pass the results back to the webhook
     return_results(results, args.webhook_url, json.loads(args.webhook_payload))
+
 
 if __name__ == '__main__':
     main()
