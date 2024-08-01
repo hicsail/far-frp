@@ -1,0 +1,14 @@
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { FacultyService } from './faculty.service';
+import { FrpService } from './frp.service';
+import { nocodbProvider } from './nocodb.provider';
+import { PublicationUploadService } from './publication-upload.service';
+import { PublicationService } from './publication.service';
+
+@Module({
+  imports: [HttpModule],
+  providers: [FacultyService, nocodbProvider, FrpService, PublicationService, PublicationUploadService],
+  exports: [FacultyService, nocodbProvider, FrpService, PublicationService, PublicationUploadService]
+})
+export class NocodbModule {}
