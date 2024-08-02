@@ -12,7 +12,7 @@ system_prompt = '''
 '''
 
 human_prompt = '''
-  Assess the given headline and article body based on the specified criteria. Provide a concise response indicating relevance.
+  Assess the given publication and abstract based on the specified criteria. Provide a concise response indicating relevance.
 
   Publication Title: {publication_title}
   Abstract: {abstract}
@@ -27,3 +27,29 @@ model_base_url = 'https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org'
 [scholarly.matcher.mappings]
 publication_title = 'Title OR Chapter title'
 abstract = 'Abstract'
+
+[grant.matcher]
+system_prompt = '''
+  You are an assistant tasked with determining if a given grant is associated with a given
+  research topic based on the titles of both.
+
+  Specifically, the content should be marked as relevant if it involves:
+      1. The grant likly being useful to fund the given research topic
+
+  Generate a short response indicating whether the content meets any of the above criteria. Respond
+  with "Yes" for relevance or "No" if the publication does not have high overlap.
+'''
+
+human_prompt = '''
+  Assess the given grant title based on the specified criteria. Provide a concise response indicating relevance.
+
+  Grant Title: {grant_title}
+
+  Research Topic: {frp_title}
+'''
+
+model_name = 'llama2:13b'
+model_base_url = 'https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org'
+
+[grant.matcher.mappings]
+grant_title = 'Title'
