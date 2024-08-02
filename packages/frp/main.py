@@ -96,6 +96,10 @@ def main():
                         required=False,
                         default='./config.toml',
                         help='Location of the config for running the analysis')
+    parser.add_argument('--type',
+                        required=False,
+                        default='scholarly',
+                        choices=['scholarly', 'grant'])
 
     args = parser.parse_args()
 
