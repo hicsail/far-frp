@@ -10,7 +10,23 @@ import { PublicationService } from './publication.service';
 
 @Module({
   imports: [HttpModule],
-  providers: [FacultyService, nocodbProvider, FrpService, PublicationService, PublicationUploadService, GrantsUploadService, GrantsService],
-  exports: [FacultyService, nocodbProvider, FrpService, PublicationService, PublicationUploadService, GrantsUploadService, GrantsService]
+  providers: [
+    FacultyService,
+    nocodbProvider,
+    FrpService,
+    PublicationService,
+    PublicationUploadService,
+    GrantsUploadService,
+    GrantsService
+  ],
+  exports: [
+    FacultyService,
+    nocodbProvider,
+    FrpService,
+    PublicationService,
+    PublicationUploadService,
+    GrantsUploadService,
+    GrantsService
+  ]
 })
 export class NocodbModule {}

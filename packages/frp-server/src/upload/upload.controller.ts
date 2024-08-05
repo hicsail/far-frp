@@ -16,8 +16,7 @@ export class UploadController {
   }
 
   @Post('grants')
-  async handleGrantsWebhook(@Body() payload: any): Promise<void> {
-  }
+  async handleGrantsWebhook(@Body() payload: any): Promise<void> {}
 
   /**
    * When the analysis process has complete, this will handle completing

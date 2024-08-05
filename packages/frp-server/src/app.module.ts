@@ -17,7 +17,7 @@ import configuration from './config/configuration';
     NocodbModule,
     JobModule,
     PublicationsUploadModule,
-    GrantsUploadModule,
-  ],
+    GrantsUploadModule
+  ]
 })
 export class AppModule {}

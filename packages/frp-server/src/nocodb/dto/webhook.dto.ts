@@ -5,7 +5,6 @@
 import { IsObject, IsString, ValidateNested, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
-
 export class NocoDBInsertWebhookData<T> {
   @IsString()
   table_id: string;

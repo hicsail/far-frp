@@ -31,24 +31,14 @@ export class GrantsService {
   }
 
   async linkFaculty(grantsID: string, facultyID: string): Promise<void> {
-    await this.nocodbService.dbDataTableRow.nestedLink(
-      this.grantsTableID,
-      this.grantsToFacultyID,
-      grantsID,
-      {
-        Id: facultyID
-      }
-    );
+    await this.nocodbService.dbDataTableRow.nestedLink(this.grantsTableID, this.grantsToFacultyID, grantsID, {
+      Id: facultyID
+    });
   }
 
   async linkFRP(grantsID: string, frpID: string): Promise<void> {
-    await this.nocodbService.dbDataTableRow.nestedLink(
-      this.grantsTableID,
-      this.grantsToFRPID,
-      grantsID,
-      {
-        Id: frpID
-      }
-    );
+    await this.nocodbService.dbDataTableRow.nestedLink(this.grantsTableID, this.grantsToFRPID, grantsID, {
+      Id: frpID
+    });
   }
 }

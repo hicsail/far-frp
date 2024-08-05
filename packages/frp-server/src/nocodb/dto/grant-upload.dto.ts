@@ -2,7 +2,6 @@ import { IsNumber, IsString, IsOptional, IsArray, ValidateNested } from 'class-v
 import { Type } from 'class-transformer';
 import { NocoDBFile } from './file.dto';
 
-
 export class GrantsUploadWebhookPayload {
   @IsNumber()
   Id: number;

@@ -8,9 +8,7 @@ import { requestAll } from './utils/pagination';
 @Injectable()
 export class GrantsUploadService {
   private readonly grantUploadTableID = this.configService.getOrThrow<string>('nocodb.grantUploadTableID');
-  private readonly grantUploadToFacultyID = this.configService.getOrThrow<string>(
-    'nocodb.grantUploadToFacultyID'
-  );
+  private readonly grantUploadToFacultyID = this.configService.getOrThrow<string>('nocodb.grantUploadToFacultyID');
 
   constructor(
     @InjectNocoDB() private readonly nocoDBService: Api<null>,

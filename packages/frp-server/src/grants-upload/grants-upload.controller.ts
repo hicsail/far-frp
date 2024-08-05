@@ -6,7 +6,6 @@ import { AnalysisCompletion } from './dto/completion.dto';
 
 @Controller('grants')
 export class GrantsUploadController {
-
   constructor(private readonly grantsUploadService: GrantsUploadService) {}
 
   @Post('nocodbWebhook')
