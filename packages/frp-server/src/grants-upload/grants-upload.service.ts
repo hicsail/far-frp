@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Publication } from '../nocodb/dto/publication.dto';
 import { FrpService } from '../nocodb/frp.service';
 import { FacultyService } from '../nocodb/faculty.service';
-import { PublicationService } from '../nocodb/publication.service';
+import { GrantsService } from '../nocodb/grants.service';
 import { JobService } from '../job/job.service';
 import { ConfigService } from '@nestjs/config';
-import { AnalysisCompletion } from '../publications-upload/dto/completion.dto';
+import { AnalysisCompletion } from './dto/completion.dto';
 import { GrantsUploadService as NocoDBGrants } from '../nocodb/grants-upload.service';
+import { Grant } from '../nocodb/dto/grant.dto';
 
 @Injectable()
 export class GrantsUploadService {
@@ -16,7 +16,7 @@ export class GrantsUploadService {
   constructor(
     private readonly facultyService: FacultyService,
     private readonly frpService: FrpService,
-    private readonly publicationService: PublicationService,
+    private readonly grantsService: GrantsService,
     private readonly jobService: JobService,
     private readonly configService: ConfigService,
     private readonly grantsUploadService: NocoDBGrants
@@ -60,14 +60,14 @@ export class GrantsUploadService {
     // Link the publications with the associated faculty
     await Promise.all(
       publications.map(async (publication) => {
-        await this.publicationService.linkFaculty(publication.Id.toString(), analysisResults.facultyID.toString());
+        await this.grantsService.linkFaculty(publication.Id.toString(), analysisResults.facultyID.toString());
       })
     );
 
     // Link the publications with the associated FRP
     await Promise.all(
       publications.map(async (publication) => {
-        await this.publicationService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
+        await this.grantsService.linkFRP(publication.Id.toString(), analysisResults.frpID.toString());
       })
     );
 
@@ -79,14 +79,14 @@ export class GrantsUploadService {
    * Will loop over all the publications from the analysis and either create new ones if they
    * don't exist or return the existing ones
    */
-  private async getOrCreatePublications(analysisResults: AnalysisCompletion): Promise<Publication[]> {
+  private async getOrCreatePublications(analysisResults: AnalysisCompletion): Promise<Grant[]> {
     return Promise.all(
       analysisResults.results.map(async (match) => {
-        const existing = await this.publicationService.findByTitle(match.title);
+        const existing = await this.grantsService.findByTitle(match.title);
         if (existing) {
           return existing;
         }
-        return this.publicationService.create(match.title, match.journal, match.publicationDate);
+        return this.grantsService.create(match.title, match.amount);
       })
     );
   }
