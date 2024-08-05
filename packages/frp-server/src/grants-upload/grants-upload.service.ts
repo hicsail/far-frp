@@ -5,11 +5,11 @@ import { FacultyService } from '../nocodb/faculty.service';
 import { PublicationService } from '../nocodb/publication.service';
 import { JobService } from '../job/job.service';
 import { ConfigService } from '@nestjs/config';
-import { PublicationUploadService } from '../nocodb/publication-upload.service';
-import { AnalysisCompletion } from './dto/completion.dto';
+import { AnalysisCompletion } from '../publications-upload/dto/completion.dto';
+import { GrantsUploadService as NocoDBGrants } from '../nocodb/grants-upload.service';
 
 @Injectable()
-export class PublicationsUploadService {
+export class GrantsUploadService {
   private readonly backendUrl = this.configService.getOrThrow<string>('server.url');
   private readonly nocodbBaseUrl = this.configService.getOrThrow<string>('nocodb.baseUri');
 
@@ -19,13 +19,13 @@ export class PublicationsUploadService {
     private readonly publicationService: PublicationService,
     private readonly jobService: JobService,
     private readonly configService: ConfigService,
-    private readonly publicationUploadService: PublicationUploadService
+    private readonly grantsUploadService: NocoDBGrants
   ) {}
 
-  async handleUpload(publicationUploadID: string, csvUrlStub: string) {
+  async handleUpload(grantsUploadID: string, csvUrlStub: string) {
     // Get the faculty associated with the publication upload
     // NOTE: only one faculty is allowed per upload
-    const facultyID = (await this.publicationUploadService.getFacultyLinks(publicationUploadID))[0].Id.toString();
+    const facultyID = (await this.grantsUploadService.getFacultyLinks(grantsUploadID))[0].Id.toString();
 
     // Get the FRP's associated with the faculty
     const frpIDs = (await this.facultyService.getFRPLinks(facultyID)).map((frp) => frp.Id);
@@ -72,7 +72,7 @@ export class PublicationsUploadService {
     );
 
     // Make the upload as complete
-    await this.publicationUploadService.makeComplete(analysisResults.uploadID);
+    await this.grantsUploadService.makeComplete(analysisResults.uploadID);
   }
 
   /**
