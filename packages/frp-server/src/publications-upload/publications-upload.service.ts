@@ -36,6 +36,7 @@ export class PublicationsUploadService {
 
     // Start the jobs
     for (const frp of frps) {
+      /*
       await this.jobService.triggerJob(
         `${this.nocodbBaseUrl}/${csvUrlStub}`,
         frp.Title,
@@ -46,7 +47,7 @@ export class PublicationsUploadService {
           frpID: frp.Id.toString(),
           uploadID: publicationUploadID.toString()
         }
-      );
+      ); */
     }
   }
 
