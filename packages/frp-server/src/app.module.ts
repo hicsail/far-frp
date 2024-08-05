@@ -3,6 +3,8 @@ import { UploadModule } from './upload/upload.module';
 import { NocodbModule } from './nocodb/nocodb.module';
 import { ConfigModule } from '@nestjs/config';
 import { JobModule } from './job/job.module';
+import { PublicationsModule } from './publications/publications.module';
+import { GrantsModule } from './grants/grants.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -13,7 +15,9 @@ import configuration from './config/configuration';
     }),
     UploadModule,
     NocodbModule,
-    JobModule
+    JobModule,
+    PublicationsModule,
+    GrantsModule
   ],
 })
 export class AppModule {}

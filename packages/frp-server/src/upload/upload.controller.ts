@@ -15,6 +15,10 @@ export class UploadController {
     await this.uploadService.handleUpload(publicationUploadID, csvUrlStub);
   }
 
+  @Post('grants')
+  async handleGrantsWebhook(@Body() payload: any): Promise<void> {
+  }
+
   /**
    * When the analysis process has complete, this will handle completing
    * the analysis request.
