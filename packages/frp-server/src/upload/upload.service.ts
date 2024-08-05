@@ -45,7 +45,8 @@ export class UploadService {
           facultyID: facultyID.toString(),
           frpID: frp.Id.toString(),
           uploadID: publicationUploadID.toString()
-        }
+        },
+        'scholarly'
       );
     }
   }

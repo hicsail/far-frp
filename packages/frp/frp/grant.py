@@ -16,7 +16,7 @@ class GrantAnalysis(Analysis):
         # ie) "Title or Chapter title" may not always be present
         columns_of_interest = {
             'Reporting date 1': 'string',
-            'Total Anticipated Amount OR Total Requested Amount amount': 'string',
+            'Total Anticipated Amount OR Total Requested Amount amount': 'float',
             'Sponsor Name': 'string',
             'Sponsor Type': 'string',
             'Status': 'string',

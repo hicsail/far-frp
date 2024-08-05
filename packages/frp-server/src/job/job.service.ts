@@ -47,9 +47,10 @@ export class JobService {
     frpTitle: string,
     frpYear: string,
     webhookUrl: string,
-    webhookPayload: any
+    webhookPayload: any,
+    type: 'scholarly' | 'grant'
   ): Promise<void> {
-    const command = ['python', 'main.py', csvUrl, frpTitle, frpYear, webhookUrl, JSON.stringify(webhookPayload)];
+    const command = ['python', 'main.py', csvUrl, frpTitle, frpYear, webhookUrl, JSON.stringify(webhookPayload), `--type=${type}`];
 
     this.job.spec!.template.spec!.containers[0].command = command;
 

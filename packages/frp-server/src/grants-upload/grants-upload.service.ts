@@ -47,7 +47,8 @@ export class GrantsUploadService {
           facultyID: facultyID.toString(),
           frpID: frp.Id.toString(),
           uploadID: publicationUploadID.toString()
-        }
+        },
+        'grant'
       ); */
     }
   }

@@ -41,16 +41,22 @@ def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year
     return analyzer.run_frp_analysis(csv_location, frp_title, frp_year)
 
 
-def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dict) -> None:
+def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dict, matching_type) -> None:
     """
     Return the results back to the specified location
     """
-    columns_of_interest = {
-        'Title OR Chapter title': 'title',
-        'Canonical journal title': 'journal',
-        'Authors OR Patent owners OR Presenters': 'authors',
-        'Reporting date 1': 'publicationDate'
-    }
+    if matching_type == 'scholarly':
+        columns_of_interest = {
+            'Title OR Chapter title': 'title',
+            'Canonical journal title': 'journal',
+            'Authors OR Patent owners OR Presenters': 'authors',
+            'Reporting date 1': 'publicationDate'
+        }
+    else:
+        columns_of_interest = {
+            'Award Title OR Proposal Title': 'title',
+            'Total Anticipated Amount OR Total Requested Amount amount': 'amount'
+        }
 
     # Get only the matches
     results = results[results['Part of FRP']]
@@ -62,7 +68,8 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
     results = results.rename(columns=columns_of_interest)
 
     # Convert the timestamp fields
-    results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
+    if matching_type == 'scholarly':
+        results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
     results.fillna('', inplace=True)
 
     # Convert the data to a dictionary
@@ -117,7 +124,7 @@ def main():
                            args.type)
 
     # Pass the results back to the webhook
-    return_results(results, args.webhook_url, json.loads(args.webhook_payload))
+    return_results(results, args.webhook_url, json.loads(args.webhook_payload), args.type)
 
 
 if __name__ == '__main__':
