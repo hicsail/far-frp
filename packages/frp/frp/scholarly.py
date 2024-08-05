@@ -1,31 +1,17 @@
-from pathlib import Path
 import pandas as pd
 from frp.matcher import Matcher
 import os
 import re
 import requests
+from frp.analysis import Analysis
 
 
-class FRPScholarlyAnalysis:
+class FRPScholarlyAnalysis(Analysis):
     """
     Handles the cleaning and matching of MyCV CSVs to FRPs
     """
     def __init__(self, matcher: Matcher, config: dict):
-        self._matcher = matcher
-
-        # Getting the mapping between columns and inputs
-        # to the matcher
-        # The mapping is between parameters in the matching
-        # to what they are referred to within the DataFrame.
-        # ex) publication_title: 'Title OR Chapter title'
-        self._mappings = config['matcher']['mappings']
-
-    def _load(self, csv_location: Path) -> pd.DataFrame:
-        """
-        Read in the dataframe from the CSV. Does not additional
-        processing
-        """
-        return pd.read_csv(csv_location)
+        super().__init__(matcher, config)
 
     def _standardize(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -69,8 +55,10 @@ class FRPScholarlyAnalysis:
         Filter the dataframe for only the rows that match the
         requirements. This includes removing duplicates or
         """
-        # Filter for everything on the current year or later
-        df = df[df['Reporting date 1'].dt.year >= year]
+        # Base filtering based on year
+        df = super()._filter(df, year)
+
+        # Only keep the 'scholarly articles' and 'conference papers'
         df = df[(df['Scholarly & creative work type'] == 'Scholarly article') | (df['Scholarly & creative work type'] == 'Conference paper (Published)')]
         return df
 
@@ -113,37 +101,4 @@ class FRPScholarlyAnalysis:
                 print(f'Failed to fetch data for {title}')
                 continue
 
-        return df
-
-    def _match(self, df: pd.DataFrame, frp_title: str) -> pd.DataFrame:
-        """
-        Handles running the FRP title matching against the rows
-        of the dataframe
-        """
-        # Function which is applied to every row in the dataframe
-        def apply_matcher(row: pd.Series) -> pd.Series:
-            # First get all shared mappings
-            mapping = {
-                'frp_title': frp_title
-            }
-
-            # Then, add in the values from the row as defined in the
-            # config
-            for key, value in self._mappings.items():
-                mapping[key] = row[value]
-
-            return pd.Series(self._matcher.match(mapping))
-
-        # Make a copy of the data any apply the matching row-by-row
-        matches = df.copy()
-        matches['Part of FRP'] = True
-        matches['Part of FRP'] = matches.apply(apply_matcher, axis=1)
-        return matches
-
-    def run_frp_analysis(self, csv_location: Path, frp_title: str, year: int) -> pd.DataFrame:
-        df = self._load(csv_location)
-        df = self._standardize(df)
-        df = self._filter(df, year)
-        df = self._augment(df)
-        df = self._match(df, frp_title)
         return df

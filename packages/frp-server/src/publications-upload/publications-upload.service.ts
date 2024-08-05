@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Publication } from '../nocodb/dto/publication.dto';
 import { FrpService } from '../nocodb/frp.service';
 import { FacultyService } from '../nocodb/faculty.service';
-import { AnalysisCompletion } from './dto/completion.dto';
 import { PublicationService } from '../nocodb/publication.service';
 import { JobService } from '../job/job.service';
 import { ConfigService } from '@nestjs/config';
 import { PublicationUploadService } from '../nocodb/publication-upload.service';
+import { AnalysisCompletion } from './dto/completion.dto';
 
 @Injectable()
-export class UploadService {
+export class PublicationsUploadService {
   private readonly backendUrl = this.configService.getOrThrow<string>('server.url');
   private readonly nocodbBaseUrl = this.configService.getOrThrow<string>('nocodb.baseUri');
 
@@ -40,12 +40,13 @@ export class UploadService {
         `${this.nocodbBaseUrl}/${csvUrlStub}`,
         frp.Title,
         frp.Year.toString(),
-        `${this.backendUrl}/upload/complete`,
+        `${this.backendUrl}/publications/complete`,
         {
           facultyID: facultyID.toString(),
           frpID: frp.Id.toString(),
           uploadID: publicationUploadID.toString()
-        }
+        },
+        'scholarly'
       );
     }
   }

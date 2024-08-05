@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
-from frp import FRPScholarlyAnalysis, Matcher
+from frp import FRPScholarlyAnalysis, Matcher, GrantAnalysis
 import toml
 import requests
 import pandas as pd
@@ -18,7 +18,7 @@ def download_csv(csv_url: str, download_location: Path) -> None:
         csv_file.write(result.content)
 
 
-def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year: int) -> pd.DataFrame:
+def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year: int, matching_type: str) -> pd.DataFrame:
     """
     Handles passing the running the analysis process.
     """
@@ -29,25 +29,34 @@ def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year
         config = toml.load(config_file)
 
     # Configure the matcher
-    matcher = Matcher(config['scholarly']['matcher'])
+    matcher = Matcher(config[matching_type]['matcher'])
 
     # Configure the analyzer
-    analyzer = FRPScholarlyAnalysis(matcher, config['scholarly'])
+    if matching_type == 'scholarly':
+        analyzer = FRPScholarlyAnalysis(matcher, config[matching_type])
+    else:
+        analyzer = GrantAnalysis(matcher, config[matching_type])
 
     # Collect the results
     return analyzer.run_frp_analysis(csv_location, frp_title, frp_year)
 
 
-def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dict) -> None:
+def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dict, matching_type) -> None:
     """
     Return the results back to the specified location
     """
-    columns_of_interest = {
-        'Title OR Chapter title': 'title',
-        'Canonical journal title': 'journal',
-        'Authors OR Patent owners OR Presenters': 'authors',
-        'Reporting date 1': 'publicationDate'
-    }
+    if matching_type == 'scholarly':
+        columns_of_interest = {
+            'Title OR Chapter title': 'title',
+            'Canonical journal title': 'journal',
+            'Authors OR Patent owners OR Presenters': 'authors',
+            'Reporting date 1': 'publicationDate'
+        }
+    else:
+        columns_of_interest = {
+            'Award Title OR Proposal Title': 'title',
+            'Total Anticipated Amount OR Total Requested Amount amount': 'amount'
+        }
 
     # Get only the matches
     results = results[results['Part of FRP']]
@@ -59,7 +68,8 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
     results = results.rename(columns=columns_of_interest)
 
     # Convert the timestamp fields
-    results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
+    if matching_type == 'scholarly':
+        results['publicationDate'] = results['publicationDate'].dt.strftime('%d-%m-%Y')
     results.fillna('', inplace=True)
 
     # Convert the data to a dictionary
@@ -96,6 +106,10 @@ def main():
                         required=False,
                         default='./config.toml',
                         help='Location of the config for running the analysis')
+    parser.add_argument('--type',
+                        required=False,
+                        default='scholarly',
+                        choices=['scholarly', 'grant'])
 
     args = parser.parse_args()
 
@@ -106,10 +120,11 @@ def main():
     results = run_analysis(Path(args.csv_location),
                            Path(args.config_location),
                            args.frp_title,
-                           int(args.frp_year))
+                           int(args.frp_year),
+                           args.type)
 
     # Pass the results back to the webhook
-    return_results(results, args.webhook_url, json.loads(args.webhook_payload))
+    return_results(results, args.webhook_url, json.loads(args.webhook_payload), args.type)
 
 
 if __name__ == '__main__':
