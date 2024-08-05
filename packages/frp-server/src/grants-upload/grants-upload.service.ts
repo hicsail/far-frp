@@ -36,8 +36,6 @@ export class GrantsUploadService {
 
     // Start the jobs
     for (const frp of frps) {
-      console.log(frp);
-      /*
       await this.jobService.triggerJob(
         `${this.nocodbBaseUrl}/${csvUrlStub}`,
         frp.Title,
@@ -46,10 +44,10 @@ export class GrantsUploadService {
         {
           facultyID: facultyID.toString(),
           frpID: frp.Id.toString(),
-          uploadID: publicationUploadID.toString()
+          uploadID: grantsUploadID.toString()
         },
         'grant'
-      ); */
+      );
     }
   }
 

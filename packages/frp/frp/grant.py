@@ -42,7 +42,7 @@ class GrantAnalysis(Analysis):
         df = super()._filter(df, year)
 
         # Keep only funded and awarded grants
-        df = df[(df['Status'] == 'Funded') | (df['Status'] == 'Awarded')]
+        df = df[df['Status'] == 'Awarded']
         return df
 
     def _augment(self, df: pd.DataFrame) -> pd.DataFrame:
