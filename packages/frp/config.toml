@@ -52,4 +52,4 @@ model_name = 'llama2:13b'
 model_base_url = 'https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org'
 
 [grant.matcher.mappings]
-grant_title = 'Title'
+grant_title = 'Award Title OR Proposal Title'

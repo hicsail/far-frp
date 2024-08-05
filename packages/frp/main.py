@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
-from frp import FRPScholarlyAnalysis, Matcher
+from frp import FRPScholarlyAnalysis, Matcher, GrantAnalysis
 import toml
 import requests
 import pandas as pd
@@ -32,7 +32,10 @@ def run_analysis(csv_location: Path, config_path: Path, frp_title: str, frp_year
     matcher = Matcher(config[matching_type]['matcher'])
 
     # Configure the analyzer
-    analyzer = FRPScholarlyAnalysis(matcher, config[matching_type])
+    if matching_type == 'scholarly':
+        analyzer = FRPScholarlyAnalysis(matcher, config[matching_type])
+    else:
+        analyzer = GrantAnalysis(matcher, config[matching_type])
 
     # Collect the results
     return analyzer.run_frp_analysis(csv_location, frp_title, frp_year)
