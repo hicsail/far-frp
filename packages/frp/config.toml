@@ -25,7 +25,7 @@ model_base_url = 'https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org'
 
 
 [scholarly.matcher.mappings]
-publication_title = 'Title OR Chapter title'
+publication_title = 'Title'
 abstract = 'Abstract'
 
 [grant.matcher]
@@ -52,4 +52,4 @@ model_name = 'llama2:13b'
 model_base_url = 'https://ollama-sail-24887a.apps.shift.nerc.mghpcc.org'
 
 [grant.matcher.mappings]
-grant_title = 'Award Title OR Proposal Title'
+grant_title = 'Title'

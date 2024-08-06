@@ -1,5 +1,5 @@
 from frp.matcher import Matcher
-from frp.analysis import Analysis
+from frp.analysis import Analysis, ColumnConversion
 import pandas as pd
 
 
@@ -9,30 +9,18 @@ class GrantAnalysis(Analysis):
     to FRP
     """
     def __init__(self, matcher: Matcher, config: dict):
-        super().__init__(matcher, config)
+        columns = [
+            ColumnConversion('ReportingDate', 'string', ['Reporting date 1']),
+            ColumnConversion('Title', 'string', ['Award Title OR Proposal Title']),
+            ColumnConversion('Amount', 'float', ['Total Anticipated Amount OR Total Requested Amount amount']),
+            ColumnConversion('Status', 'string', ['Status'])
+        ]
+
+        super().__init__(matcher, config, columns)
 
     def _standardize(self, df: pd.DataFrame) -> pd.DataFrame:
-        # TODO: May have to convert between a few different column names
-        # ie) "Title or Chapter title" may not always be present
-        columns_of_interest = {
-            'Reporting date 1': 'string',
-            'Total Anticipated Amount OR Total Requested Amount amount': 'float',
-            'Sponsor Name': 'string',
-            'Sponsor Type': 'string',
-            'Status': 'string',
-            'Award Title OR Proposal Title': 'string',
-            'Prime Sponsor Name': 'string',
-            'Source': 'string'
-        }
-
-        # Get only the columns we care about
-        df = df[columns_of_interest.keys()]
-
-        # Convert the columns into the proper types
-        df = df.astype(columns_of_interest)
-
         # Handle the datetime formatting
-        df['Reporting date 1'] = pd.to_datetime(df['Reporting date 1'], format='%d/%m/%Y')
+        df['ReportingDate'] = pd.to_datetime(df['ReportingDate'], format='%d/%m/%Y')
 
         # Return the dataframe of interest
         return df
