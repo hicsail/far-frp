@@ -52,7 +52,6 @@ export class GrantsUploadService {
   }
 
   async handleAnalysisCompletion(analysisResults: AnalysisCompletion): Promise<void> {
-    console.log(analysisResults);
     // Get all publications from the matching
     const publications = await this.getOrCreatePublications(analysisResults);
 

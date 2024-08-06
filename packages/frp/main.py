@@ -54,8 +54,8 @@ def return_results(results: pd.DataFrame, webhook_url: str, webhook_payload: dic
         }
     else:
         columns_of_interest = {
-            'Award Title OR Proposal Title': 'title',
-            'Total Anticipated Amount OR Total Requested Amount amount': 'amount'
+            'Title': 'title',
+            'Amount': 'amount'
         }
 
     # Get only the matches

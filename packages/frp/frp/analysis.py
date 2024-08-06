@@ -67,7 +67,7 @@ class Analysis(ABC):
         """
         Default filtering which handles considering just the year
         """
-        df = df[df['Reporting date 1'].dt.year >= year]
+        df = df[df['ReportingDate'].dt.year >= year]
         return df
 
     @abstractmethod
