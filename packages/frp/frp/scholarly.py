@@ -15,16 +15,19 @@ class FRPScholarlyAnalysis(Analysis):
             ColumnConversion('ReportingDate', 'string', ['Reporting date 1']),
             ColumnConversion('Title', 'string', [
                 'Title OR Chapter title',
-                'Title OR Review title'
+                'Title OR Review title',
+                'Title'
             ]),
             ColumnConversion('WorkType', 'string', ['Scholarly & creative work type']),
             ColumnConversion('Authors', 'string', [
                 'Authors OR Patent owners OR Presenters',
-                'Authors OR Presenters OR Reviewers'
+                'Authors OR Presenters OR Reviewers',
+                'Authors OR Presenters'
             ]),
             ColumnConversion('Journal', 'string',[
                 'Canonical journal title',
-                'Publisher'
+                'Publisher',
+                'Published proceedings OR Journal'
             ])
         ]
 
