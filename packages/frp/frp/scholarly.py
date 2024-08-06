@@ -16,7 +16,8 @@ class FRPScholarlyAnalysis(Analysis):
             ColumnConversion('Title', 'string', [
                 'Title OR Chapter title',
                 'Title OR Review title',
-                'Title'
+                'Title',
+                'Chapter title OR Title'
             ]),
             ColumnConversion('WorkType', 'string', ['Scholarly & creative work type']),
             ColumnConversion('Authors', 'string', [
