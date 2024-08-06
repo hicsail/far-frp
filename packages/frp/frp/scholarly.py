@@ -3,7 +3,7 @@ from frp.matcher import Matcher
 import os
 import re
 import requests
-from frp.analysis import Analysis
+from frp.analysis import Analysis, ColumnConversion
 
 
 class FRPScholarlyAnalysis(Analysis):
@@ -11,41 +11,19 @@ class FRPScholarlyAnalysis(Analysis):
     Handles the cleaning and matching of MyCV CSVs to FRPs
     """
     def __init__(self, matcher: Matcher, config: dict):
-        super().__init__(matcher, config)
+        columns = [
+            ColumnConversion('ReportingDate', 'string', ['Reporting date 1']),
+            ColumnConversion('Title', 'string', ['Title OR Chapter title']),
+            ColumnConversion('WorkType', 'string', ['Scholarly & creative work type']),
+            ColumnConversion('Authors', 'string', ['Authors OR Patent owners OR Presenters']),
+            ColumnConversion('Journal', 'string', ['Canonical journal title'])
+        ]
+
+        super().__init__(matcher, config, columns)
 
     def _standardize(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Handles taking the data frame loaded in from `load` and
-        handles making the columns have a standard name and standard
-        type
-        """
-        # TODO: May have to convert between a few different column names
-        # ie) "Title or Chapter title" may not always be present
-        columns_of_interest = {
-            'Reporting date 1': 'string',
-            'Scholarly & creative work type': 'string',
-            'Authors OR Patent owners OR Presenters': 'string',
-            'URL OR Author URL': 'string',
-            'DOI': 'string',
-            'Funding': 'string',
-            'Published proceedings OR Journal': 'string',
-            'Conference name OR Presented at OR Meeting or conference': 'string',
-            'Status': 'string',
-            'Publisher': 'string',
-            'Publication date OR Date awarded OR Presentation date': 'datetime64[ns]',
-            'Title OR Chapter title': 'string',
-            'Sub types': 'string',
-            'Canonical journal title': 'string'
-        }
-
-        # Get only the columns we care about
-        df = df[columns_of_interest.keys()]
-
-        # Convert the columns into the proper types
-        df = df.astype(columns_of_interest)
-
         # Handle the datetime formatting
-        df['Reporting date 1'] = pd.to_datetime(df['Reporting date 1'], format='%d/%m/%Y')
+        df['ReportingDate'] = pd.to_datetime(df['ReportingDate'], format='%d/%m/%Y')
 
         # Return the dataframe of interest
         return df
@@ -59,7 +37,7 @@ class FRPScholarlyAnalysis(Analysis):
         df = super()._filter(df, year)
 
         # Only keep the 'scholarly articles' and 'conference papers'
-        df = df[(df['Scholarly & creative work type'] == 'Scholarly article') | (df['Scholarly & creative work type'] == 'Conference paper (Published)')]
+        df = df[(df['WorkType'] == 'Scholarly article') | (df['WorkType'] == 'Conference paper (Published)')]
         return df
 
     def _augment(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -80,7 +58,7 @@ class FRPScholarlyAnalysis(Analysis):
         token = resp.json()['token']
 
         for index, row in df.iterrows():
-            title = row['Title OR Chapter title']
+            title = row['Title']
             # apply pattern to escape special characters
             title = re.sub(pattern, r'\\\1', title)
 

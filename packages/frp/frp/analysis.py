@@ -13,9 +13,9 @@ class ColumnConversion:
     names the column could have and what the output
     name should be.
     """
-    possible_names: list[str]
     output_name: str
     column_type: str
+    possible_names: list[str]
 
 
 class Analysis(ABC):
