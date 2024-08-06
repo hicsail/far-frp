@@ -13,10 +13,19 @@ class FRPScholarlyAnalysis(Analysis):
     def __init__(self, matcher: Matcher, config: dict):
         columns = [
             ColumnConversion('ReportingDate', 'string', ['Reporting date 1']),
-            ColumnConversion('Title', 'string', ['Title OR Chapter title']),
+            ColumnConversion('Title', 'string', [
+                'Title OR Chapter title',
+                'Title OR Review title'
+            ]),
             ColumnConversion('WorkType', 'string', ['Scholarly & creative work type']),
-            ColumnConversion('Authors', 'string', ['Authors OR Patent owners OR Presenters']),
-            ColumnConversion('Journal', 'string', ['Canonical journal title'])
+            ColumnConversion('Authors', 'string', [
+                'Authors OR Patent owners OR Presenters',
+                'Authors OR Presenters OR Reviewers'
+            ]),
+            ColumnConversion('Journal', 'string',[
+                'Canonical journal title',
+                'Publisher'
+            ])
         ]
 
         super().__init__(matcher, config, columns)
