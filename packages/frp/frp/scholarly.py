@@ -18,20 +18,21 @@ class FRPScholarlyAnalysis(Analysis):
                 'Title OR Review title',
                 'Title',
                 'Chapter title OR Title',
-                'Title'
+                'Title',
+                'Title OR Chapter title OR Review title'
             ]),
             ColumnConversion('WorkType', 'string', ['Scholarly & creative work type']),
             ColumnConversion('Authors', 'string', [
                 'Authors OR Patent owners OR Presenters',
                 'Authors OR Presenters OR Reviewers',
                 'Authors OR Presenters',
-                'Authors'
+                'Authors',
             ]),
             ColumnConversion('Journal', 'string',[
                 'Canonical journal title',
-                'Publisher',
                 'Published proceedings OR Journal',
-                'Journal'
+                'Journal',
+                'Published proceedings OR Journal OR Publication'
             ])
         ]
 
