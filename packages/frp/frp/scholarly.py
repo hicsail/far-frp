@@ -28,7 +28,7 @@ class FRPScholarlyAnalysis(Analysis):
                 'Authors OR Presenters',
                 'Authors',
             ]),
-            ColumnConversion('Journal', 'string',[
+            ColumnConversion('Journal', 'string', [
                 'Canonical journal title',
                 'Published proceedings OR Journal',
                 'Journal',

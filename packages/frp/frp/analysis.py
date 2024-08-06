@@ -31,7 +31,6 @@ class Analysis(ABC):
         # ex) publication_title: 'Title OR Chapter title'
         self._mappings = config['matcher']['mappings']
 
-
     def _load(self, csv_location: Path) -> pd.DataFrame:
         """
         Read in the dataframe from the CSV. Does not additional
@@ -49,12 +48,12 @@ class Analysis(ABC):
             # Determine which of the possible column names is correct
             try:
                 original_column_name = next(name for name in column.possible_names if name in df.columns)
-            except:
+            except StopIteration:
                 raise Exception(f'Could not find suitable column for {column.output_name}')
             output[column.output_name] = df[original_column_name]
 
         # Next, convert the columns to the appropriate types
-        column_conversion_dict = { column.output_name: column.column_type for column in self.columns }
+        column_conversion_dict = {column.output_name: column.column_type for column in self.columns}
         output = output.astype(column_conversion_dict)
 
         return output
