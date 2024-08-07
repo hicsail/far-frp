@@ -50,6 +50,9 @@ export class JobService {
     webhookPayload: any,
     type: 'scholarly' | 'grant'
   ): Promise<void> {
+    // Give the job a random enough name for multiple instances to run at the same time
+    this.job.metadata!.name = `frp-job-${type}-${(Math.random() + 1).toString(36).substring(7)}`;
+
     const command = [
       'python',
       'main.py',
