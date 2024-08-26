@@ -13,6 +13,10 @@ export class GrantsUploadController {
     const grantsUploadID = payload.data.rows[0].Id.toString();
     const csvUrlStub = payload.data.rows[0].FAR[0].signedPath;
 
+    if (payload.data.rows[0].Status == 'Complete') {
+      return;
+    }
+
     await this.grantsUploadService.handleUpload(grantsUploadID, csvUrlStub);
   }
 
