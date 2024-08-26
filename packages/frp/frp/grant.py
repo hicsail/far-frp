@@ -16,13 +16,20 @@ class GrantAnalysis(Analysis):
                 'Proposal Title OR Award Title',
                 'Award Title OR Proposal Title OR Title',
                 'Award Title OR Title OR Proposal Title',
-                'Proposal Title OR Title'
+                'Proposal Title OR Title',
+                'Proposal Title OR Award Title OR Title',
+                'Proposal Title OR Title OR Award Title',
+                'Proposal Title',
+                'Title'
             ]),
             ColumnConversion('Amount', 'float', [
                 'Total Anticipated Amount OR Total Requested Amount amount',
                 'Total Requested Amount OR Total Anticipated Amount amount',
                 'Total Anticipated Amount OR Total Requested Amount OR Amount amount',
-                'Total Anticipated Amount OR Amount OR Total Requested Amount amount'
+                'Total Anticipated Amount OR Amount OR Total Requested Amount amount',
+                'Total Requested Amount OR Amount OR Total Anticipated Amount amount',
+                'Total Requested Amount amount',
+                'Total Anticipated Amount amount'
             ]),
             ColumnConversion('Status', 'string', ['Status'])
         ]
