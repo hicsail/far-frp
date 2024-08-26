@@ -11,8 +11,18 @@ class GrantAnalysis(Analysis):
     def __init__(self, matcher: Matcher, config: dict):
         columns = [
             ColumnConversion('ReportingDate', 'string', ['Reporting date 1']),
-            ColumnConversion('Title', 'string', ['Award Title OR Proposal Title']),
-            ColumnConversion('Amount', 'float', ['Total Anticipated Amount OR Total Requested Amount amount']),
+            ColumnConversion('Title', 'string', [
+                'Award Title OR Proposal Title',
+                'Proposal Title OR Award Title',
+                'Award Title OR Proposal Title OR Title',
+                'Award Title OR Title OR Proposal Title'
+            ]),
+            ColumnConversion('Amount', 'float', [
+                'Total Anticipated Amount OR Total Requested Amount amount',
+                'Total Requested Amount OR Total Anticipated Amount amount',
+                'Total Anticipated Amount OR Total Requested Amount OR Amount amount',
+                'Total Anticipated Amount OR Amount OR Total Requested Amount amount'
+            ]),
             ColumnConversion('Status', 'string', ['Status'])
         ]
 
