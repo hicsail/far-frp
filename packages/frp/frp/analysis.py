@@ -78,6 +78,12 @@ class Analysis(ABC):
         Handles running the FRP title matching against the rows
         of the dataframe
         """
+        # If no data, don't run matching
+        if df.empty:
+            matches = df.copy()
+            matches['Part of FRP'] = False
+            return matches
+
         # Function which is applied to every row in the dataframe
         def apply_matcher(row: pd.Series) -> pd.Series:
             # First get all shared mappings
