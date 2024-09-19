@@ -28,7 +28,7 @@ export class GrantsUploadService {
 
   async makeComplete(grantUploadID: string): Promise<void> {
     await this.nocoDBService.dbDataTableRow.update(this.grantUploadTableID, {
-      Id: grantUploadID,
+      Id: parseInt(grantUploadID),
       Status: 'Complete'
     });
   }
